@@ -1,0 +1,97 @@
+/*!
+ * CoreUI Datatable Fix
+ * version : 1.0
+ */
+
+.dt-buttons.btn-group > a {
+	padding-bottom: 10px;
+}
+
+.dataTables_filter{
+	display: none;
+}
+
+.dataTables_filter > label {
+	position: absolute;
+	right: 20px;
+	margin-top: -25px;
+	font-size: 12.25px;
+}
+
+.dataTables_filter > label > input {
+	margin-left: 5px;
+	font-size: 12.25px;
+}
+
+.pagination {
+	position: absolute;
+	right: 20px;
+	margin-top: -20px;
+	padding-top: 10px;
+}
+
+.paginate_button > a {
+	border: solid 1px #c8ced3;
+	border-right: none;
+	padding: 8px 12px;
+	text-decoration:none;
+}
+
+.paginate_button.disabled > a {
+	color: #c8ced3;
+	cursor: default;
+}
+
+.paginate_button.disabled > a:hover {
+	background-color: #fff;
+}
+
+.paginate_button > a:hover {
+	background-color: #e4e7ea;
+}
+
+.paginate_button.active > a {
+	cursor: default;
+	color: #fff;
+	background-color: #20a8d8;
+	border-color: #20a8d8;
+}
+
+.paginate_button.previous > a {
+	border-radius: 4px 0 0 4px;
+}
+
+.paginate_button.next > a {
+	border-radius: 0 4px 4px 0;
+	border-right: solid 1px #c8ced3;
+}
+
+.dataTable> thead > tr > th {
+	padding: 7.5px;
+}
+
+.dataTable> tfoot > tr > th {
+	padding: 7.5px;
+}
+
+th.sorting {
+	cursor: pointer;
+}
+
+th.sorting_asc {
+	cursor: pointer;
+}
+
+th.sorting_desc {
+	cursor: pointer;
+}
+
+.dataTable> tbody > tr > td {
+	padding: 7.5px;
+	vertical-align: middle;
+}
+
+.dataTable> tbody > tr > td > form > .btn-group > .btn {
+	padding: 2px 5px;
+	font-size: 12px;
+}
