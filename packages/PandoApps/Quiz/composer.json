@@ -1,0 +1,50 @@
+{
+    "name": "pandoapps/quiz",
+    "description": ":description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PandoApps",
+            "email": "contato@pandoapps.com.br",
+            "homepage": "https://pandoapps.com.br"
+        }
+    ],
+    "homepage": "https://github.com/pandoapps/quiz",
+    "keywords": ["Laravel", "Quiz"],
+    "require": {
+        "illuminate/support": "~5",
+        "php": "^7.1.3",
+        "laracasts/flash": "^3.0",
+        "laravel/framework": "5.8.*",
+        "laravelcollective/html": "^5.8.0",
+        "yajra/laravel-datatables-oracle": "~9.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PandoApps\\Quiz\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PandoApps\\Quiz\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PandoApps\\Quiz\\QuizServiceProvider",
+                "Yajra\\DataTables\\DataTablesServiceProvider"
+            ],
+            "aliases": {
+                "Quiz": "PandoApps\\Quiz\\Facades\\Quiz",
+                "DataTables" : "Yajra\\DataTables\\Facades\\DataTables"
+            }
+        }
+    }
+}

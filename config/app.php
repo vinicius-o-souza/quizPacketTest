@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Chaves\QuizGenerator\QuizServiceProvider::class,
+        PandoApps\Quiz\QuizServiceProvider::class,
 
         /*
          * Application Service Providers...
