@@ -2,13 +2,12 @@
 
 namespace PandoApps\Quiz\Controllers;
 
-use PandoApps\Quiz\Models\Question;
-use PandoApps\Quiz\Models\QuestionType;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use Flash;
-use PandoApps\Quiz\Models\Questionnaire;
+use PandoApps\Quiz\Models\Question;
+use PandoApps\Quiz\Models\QuestionType;
+use PandoApps\Quiz\DataTables\QuestionDataTable;
 
 /**
  *  Essa classe possui métodos para criar, atualizar, excluir e exibir questões
@@ -20,11 +19,10 @@ class QuestionController extends Controller
     /**
      * Retorna todas as questões cadastradas
      */
-    public function index()
+    public function index(QuestionDataTable $questionDataTable)
     {
-        $questions = Question::where('questionnaire_id',$this->questionnaire->id)->get();
-
-        return view('questions::index',compact('questions'));
+        return $questionDataTable->render('pandoapps::questions.index');
+        // return view('pandoapps::questions.index',compact('questions'));
     }
 
     /**
@@ -32,9 +30,9 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $questionTypes = QuestionType::orderBy('name','asc')->pluck('name','id')->toArray();
+        $questionsType = QuestionType::orderBy('name','asc')->pluck('name','id')->toArray();
 
-        return view('questions::create', compact('questionTypes'));
+        return view('pandoapps::questions.create', compact('questionsType'));
     }
 
     /**
@@ -44,40 +42,31 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'            => 'required',
-        'body'             => 'required',
-        'hint'             => 'max:100',
-        'is_required'      => 'boolean',
-        'questionnaire_id' => 'required|exists:questionnaires,id',
-        'question_type_id' => 'required|exists:question_types,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $questionValidation = Validator::make($input, Question::$rules);
+        if ($questionValidation->fails()) {
+            $errors = $questionValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
         Question::create([
-        'title'            => $data['title'],
-        'body'             => $data['body'],
-        'hint'             => isset($data['hint']) ? $data['hint'] : '',
-        'is_required'      => isset($data['is_required']) ? $data['is_required'] : '',
-        'questionnaire_id' => $this->questionnaire->id,
-        'question_type_id' => $data['question_type_id'],
+            'title'            => $input['title'],
+            'body'             => $input['body'],
+            'hint'             => isset($input['hint']) ? $input['hint'] : '',
+            'is_required'      => isset($input['is_required']) ? true : '',
+            'questionnaire_id' => request()->questionnaire_id,
+            'question_type_id' => $input['question_type_id'],
         ]);
 
-        $response_log['data_success'] = ['message' => 'Questão criada com sucesso!'];
+        flash('Questão criada com sucesso!')->success();
 
-        Flash::success('Questão criada com sucesso!');
-
-        return $response_log;
+        return redirect(route('questions.index', request()->questionnaire_id));
     }
 
     /**
@@ -89,14 +78,13 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        if(empty($question))
-        {
-        Flash::error('Questão não encontrada!');
+        if(empty($question)) {
+            flash('Questão não encontrada!')->error();
 
-        return redirect(route('questions.index'));
+            return redirect(route('questions.index'));
         }
 
-        return view('questions::edit', compact('question'));
+        return view('pandoapps::questions.edit', compact('question'));
     }
 
     /**
@@ -109,36 +97,28 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        if(empty($question))
-        {
-        Flash::error('Questão não encontrada!');
+        if(empty($question)) {
+            flash('Questão não encontrada!')->error();
 
-        return redirect(route('questions.index'));
+            return redirect(route('questions.index'));
         }
 
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'            => 'required',
-        'body'             => 'required',
-        'hint'             => 'max:100',
-        'is_required'      => 'boolean',
-        'questionnaire_id' => 'required|exists:questionnaires,id',
-        'question_type_id' => 'required|exists:question_types,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $questionValidation = Validator::make($input, Question::$rules);
+        if ($questionValidation->fails()) {
+            $errors = $questionValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
-        $question->update($data);
+        $question->update($input);
 
-        Flash::success('Questão atualizada com sucesso!');
+        flash('Questão atualizada com sucesso!')->success();
 
         return redirect(route('questions.index'));
     }
@@ -152,14 +132,13 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        if(empty($question))
-        {
-        Flash::error('Questão não encontrada!');
+        if(empty($question)) {
+            flash('Questão não encontrada!')->error();
 
-        return redirect(route('questions.index'));
+            return redirect(route('questions.index'));
         }
 
-        return view('questions::show', compact('question'));
+        return view('pandoapps::questions.show', compact('question'));
     }
 
     /**
@@ -171,18 +150,17 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
-        if(empty($question))
-        {
-        Flash::error('Questão não encontrada!');
+        if(empty($question)) {
+            flash('Questão não encontrada!')->error();
 
-        return redirect(route('questions.index'));
+            return redirect(route('questions.index'));
         }
 
         $id = $question->id;
         $question->delete();
 
-        Flash::success('Questão deletada com sucesso!');
+        flash('Questão deletada com sucesso!')->success();
 
-        return redirect(route('questions.index', $id));
+        return redirect(route('questions.index'));
     }
 }

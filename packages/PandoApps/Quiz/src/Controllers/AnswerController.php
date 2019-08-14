@@ -4,12 +4,9 @@ namespace PandoApps\Quiz\Controllers;
 
 use PandoApps\Quiz\Models\Alternative;
 use PandoApps\Quiz\Models\Answer;
-use PandoApps\Quiz\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use Flash;
-use PandoApps\Quiz\Models\Questionnaire;
 
 /**
  *  Essa classe possui métodos para criar, atualizar, excluir e exibir respostas
@@ -23,9 +20,9 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        $answers = Answer::whereHas('question_id',$this->question->id)->get();
+        $answers = Answer::whereHas('question_id', request()->question_id)->get();
 
-        return view('answers::index',compact('answers'));
+        return view('pandoapps::answers.index',compact('answers'));
     }
 
     /**
@@ -33,9 +30,9 @@ class AnswerController extends Controller
      */
     public function create()
     {
-        $alternatives = Alternative::where('question_id',$this->question->id)->orderBy('name','asc')->pluck('name','id')->toArray();
+        $alternatives = Alternative::where('question_id', request()->question_id)->orderBy('name','asc')->pluck('name','id')->toArray();
 
-        return view('answers::create', compact('alternatives'));
+        return view('pandoapps::answers.create', compact('alternatives'));
     }
 
     /**
@@ -45,32 +42,27 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'       => 'required',
-        'question_id' => 'required|exists:questions,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $answerValidation = Validator::make($input, Answer::$rules);
+        if ($answerValidation->fails()) {
+            $errors = $answerValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
         Answer::create([
-        'title'       => $data['title'],
-        'question_id' => $data['question_id'],
+            'title'       => $input['title'],
+            'question_id' => $input['question_id'],
         ]);
 
-        $response_log['data_success'] = ['message' => 'Resposta criada com sucesso!'];
+        flash('Resposta criada com sucesso!')->success();
 
-        Flash::success('Resposta criada com sucesso!');
-
-        return $response_log;
+        return redirect(route('answer.index'));
     }
 
     /**
@@ -82,14 +74,13 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($id);
 
-        if(empty($answer))
-        {
-        Flash::error('Resposta não encontrada!');
+        if(empty($answer)) {
+            flash('Resposta não encontrada!')->error();
 
-        return redirect(route('answers.index'));
+            return redirect(route('answers.index'));
         }
 
-        return view('answers::edit', compact('answer'));
+        return view('pandoapps::answers.edit', compact('answer'));
     }
 
     /**
@@ -102,32 +93,28 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($id);
 
-        if(empty($answer))
-        {
-        Flash::error('Resposta não encontrada!');
+        if(empty($answer)) {
+            flash('Resposta não encontrada!')->error();
 
-        return redirect(route('answers.index'));
+            return redirect(route('answers.index'));
         }
 
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'       => 'required',
-        'question_id' => 'required|exists:questions,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $answerValidation = Validator::make($input, Answer::$rules);
+        if ($answerValidation->fails()) {
+            $errors = $answerValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
-        $answer->update($data);
+        $answer->update($input);
 
-        Flash::success('Resposta atualizada com sucesso!');
+        flash('Resposta atualizada com sucesso!')->success();
 
         return redirect(route('answers.index'));
     }
@@ -141,14 +128,13 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($id);
 
-        if(empty($answer))
-        {
-        Flash::error('Resposta não encontrada!');
+        if(empty($answer)) {
+            flash('Resposta não encontrada!')->error();
 
-        return redirect(route('answers.index'));
+            return redirect(route('answers.index'));
         }
 
-        return view('answers::show', compact('answer'));
+        return view('pandoapps::answers.show', compact('answer'));
     }
 
     /**
@@ -160,17 +146,16 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($id);
 
-        if(empty($answer))
-        {
-        Flash::error('Resposta não encontrada!');
+        if(empty($answer)) {
+            flash('Resposta não encontrada!')->error();
 
-        return redirect(route('answers.index'));
+            return redirect(route('answers.index'));
         }
 
         $id = $answer->id;
         $answer->delete();
 
-        Flash::success('Resposta deletada com sucesso!');
+        flash('Resposta deletada com sucesso!')->success();
 
         return redirect(route('answers.index', $id));
     }

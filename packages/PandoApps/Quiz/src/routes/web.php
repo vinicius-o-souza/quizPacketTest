@@ -2,14 +2,14 @@
 
 Route::resource('questionnaires', 'QuestionnaireController');
 
-Route::resource('question_type', 'QuestionTypeController');
+Route::resource('question_types', 'QuestionTypeController');
 
 Route::group(['prefix' => 'questionnaires/{questionnaire_id}'], function()
 {
     /*
    * Rotas para acesso as questões do questinário
    */
-    Route::resource('question', 'QuestionController');
+    Route::resource('questions', 'QuestionController');
 
     /*
     * Rotas para acesso aos usuários que responderam os questinários

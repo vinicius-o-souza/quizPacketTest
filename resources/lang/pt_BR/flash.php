@@ -1,0 +1,24 @@
+<?php
+
+return [
+
+    'updated'                  => '[m] atualizado com sucesso!                                   |[f] atualizada com sucesso!',
+    'updated_plural'           => '[m] atualizados com sucesso!                                  |[f] atualizadas com sucesso!',
+
+    'saved'                    => '[m] criado com sucesso!                                       |[f] criada com sucesso!',
+    'saved_plural'             => '[m] criados com sucesso!                                      |[f] criadas com sucesso!',
+
+    'not_found'                => '[m] não encontrado.                                           |[f] não encontrada.',
+
+    'deleted'                  => '[m] deletado com sucesso!                                     |[f] deletada com sucesso!',
+    'not_deleted'              => '[m] não pode ser deletado pois há outros registros atrelados a ele. |[f] não pode ser deletada pois há outros registros atrelados a ela.',
+
+    'completed'                => '[m] completado com sucesso!                                   |[f] completada com sucesso!',
+    'inactivated'              => '[m] inativado com sucesso!                                    |[f] inativada com sucesso!',
+    'activated'                => '[m] ativado com sucesso!                                      |[f] ativada com sucesso!',
+    
+    'self_delete'              => 'Você não pode inativar o seu próprio usuário!',
+    'error_403'                => 'Você não tem permissão para acessar a página requisitada.',
+    'error_404'                => 'A página requisitada não existe.',
+    'inactive_user'            => 'Seu usuário foi desativado.',
+];

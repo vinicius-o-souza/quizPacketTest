@@ -21,7 +21,7 @@ class QuestionTypeController extends Controller
     {
         $questionType = QuestionType::all();
 
-        return view('pandoapps::question_type.index',compact('questionType'));
+        return view('pandoapps::question_types.index',compact('questionType'));
     }
 
     /**
@@ -29,7 +29,7 @@ class QuestionTypeController extends Controller
      */
     public function create()
     {
-        return view('pandoapps::question_type.create');
+        return view('pandoapps::question_types.create');
     }
 
     /**
@@ -41,9 +41,9 @@ class QuestionTypeController extends Controller
     {
         $input = $request->all();
 
-        $questionnaire_validation = Validator::make($input, QuestionType::$rules);
-        if ($questionnaire_validation->fails()) {
-            $errors = $questionnaire_validation->errors();
+        $questionTypeValidation = Validator::make($input, QuestionType::$rules);
+        if ($questionTypeValidation->fails()) {
+            $errors = $questionTypeValidation->errors();
             $msg = '';
             foreach($errors->all() as $message) {
                 $msg .= $message . '<br>';
@@ -54,12 +54,12 @@ class QuestionTypeController extends Controller
 
         QuestionType::create([
             'name'        => $input['name'],
-            'answer_once' => isset($input['answer_once']) ? true : false
+            'description' => $input['description']
         ]);
 
-        flash('Questionário criado com sucesso!')->success();
+        flash('Tipo de questão criado com sucesso!')->success();
 
-        return redirect(route('question_type.index'));
+        return redirect(route('question_types.index'));
     }
 
     /**
@@ -69,16 +69,16 @@ class QuestionTypeController extends Controller
      */
     public function edit($id)
     {
-        $questionnaire = QuestionType::find($id);
+        $questionType = QuestionType::find($id);
 
-        if(empty($questionnaire))
+        if(empty($questionType))
         {
-            flash('Questionário não encontrado!')->error();
+            flash('Tipo de questão não encontrado!')->error();
 
-            return redirect(route('question_type.index', $questionnaire->id));
+            return redirect(route('question_types.index', $questionType->id));
         }
 
-        return view('pandoapps::question_type.edit', compact('questionnaire'));
+        return view('pandoapps::question_types.edit', compact('questionType'));
     }
 
     /**
@@ -89,19 +89,19 @@ class QuestionTypeController extends Controller
      */
     public function update($id, Request $request)
     {
-        $questionnaire = QuestionType::find($id);
+        $questionType = QuestionType::find($id);
 
-        if(empty($questionnaire)) {
-            flash('Questionário não encontrado!')->error();
+        if(empty($questionType)) {
+            flash('Tipo de questão não encontrado!')->error();
 
-            return redirect(route('question_type.index'));
+            return redirect(route('question_types.index'));
         }
 
         $input = $request->all();
 
-        $questionnaire_validation = Validator::make($input, QuestionType::$rules);
-        if ($questionnaire_validation->fails()) {
-            $errors = $questionnaire_validation->errors();
+        $questionTypeValidation = Validator::make($input, QuestionType::$rules);
+        if ($questionTypeValidation->fails()) {
+            $errors = $questionTypeValidation->errors();
             $msg = '';
             foreach($errors->all() as $message) {
                 $msg .= $message . '<br>';
@@ -110,11 +110,11 @@ class QuestionTypeController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $questionnaire->update($input);
+        $questionType->update($input);
 
-        flash('Questionário atualizado com sucesso!')->success();
+        flash('Tipo de questão atualizado com sucesso!')->success();
 
-        return redirect(route('question_type.index', $questionnaire->id));
+        return redirect(route('question_types.index'));
     }
 
     /**
@@ -124,15 +124,15 @@ class QuestionTypeController extends Controller
      */
     public function show($id)
     {
-        $questionnaire = QuestionType::find($id);
+        $questionType = QuestionType::find($id);
 
-        if(empty($questionnaire)) {
-            flash('Questionário não encontrado!')->error();
+        if(empty($questionType)) {
+            flash('Tipo de questão não encontrado!')->error();
 
-            return redirect(route('question_type.index', $questionnaire->id));
+            return redirect(route('question_types.index', $questionType->id));
         }
 
-        return view('pandoapps::question_type.show', compact('questionnaire'));
+        return view('pandoapps::question_types.show', compact('questionType'));
     }
 
     /**
@@ -142,19 +142,19 @@ class QuestionTypeController extends Controller
      */
     public function destroy($id)
     {
-        $questionnaire = QuestionType::find($id);
+        $questionType = QuestionType::find($id);
 
-        if(empty($questionnaire)) {
-            flash('Questionário não encontrado!')->error();
+        if(empty($questionType)) {
+            flash('Tipo de questão não encontrado!')->error();
 
-            return redirect(route('question_type.index', $questionnaire->id));
+            return redirect(route('question_types.index', $questionType->id));
         }
 
-        $id = $questionnaire->id;
-        $questionnaire->delete();
+        $id = $questionType->id;
+        $questionType->delete();
 
-        flash('Questionário deletado com sucesso!')->success();
+        flash('Tipo de questão deletado com sucesso!')->success();
 
-        return redirect(route('question_type.index', $id));
+        return redirect(route('question_types.index'));
     }
 }

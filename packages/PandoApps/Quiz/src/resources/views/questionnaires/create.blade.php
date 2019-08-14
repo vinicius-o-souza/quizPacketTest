@@ -18,7 +18,7 @@
                                 <strong>Cadastrar Questionários</strong>
                             </div>
                             <div class="card-body">
-                                {!! Form::open(['route' => 'questionnaires.store', 'files' => true]) !!}
+                                {!! Form::open(['route' => 'questionnaires.store']) !!}
 
                                    @include('pandoapps::questionnaires.fields')
 

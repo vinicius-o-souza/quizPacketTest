@@ -3,6 +3,7 @@
 namespace PandoApps\Quiz;
 
 use Illuminate\Support\ServiceProvider;
+use Yajra\DataTables;
 
 class QuizServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class QuizServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'pandoapps');
+        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'pandoapps');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'pandoapps');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         $this->app['router']->namespace('PandoApps\\Quiz\\Controllers')
@@ -40,7 +41,7 @@ class QuizServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('quiz', function ($app) {
-            return new Quiz;
+            return new Quiz( new DataTables);
         });
     }
 
@@ -61,15 +62,35 @@ class QuizServiceProvider extends ServiceProvider
      */
     protected function bootForConsole()
     {
+        // Publishing the config.
+        $this->publishes([
+            __DIR__.'/../config/quiz.php' => config_path('quiz.php'),
+        ]);
+
         // Publishing the views.
         $this->publishes([
             __DIR__.'/resources/views' => base_path('resources/views/vendor/pandoapps_quiz'),
         ], 'quiz.views');
 
+        // Publishing the assets.
+        $this->publishes([
+            __DIR__.'/public/' => public_path('vendor/pandoapps_quiz'),
+        ], 'public');
+
         // Publishing the migrations.
         $this->publishes([
             __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'migrations');
+
+        // Publishing the seeder.
+        $this->publishes([
+            __DIR__ . '/../database/seeds/' => database_path('seeds'),
+        ], 'seeds');
+
+        // Publishing the translations.
+        $this->publishes([
+            __DIR__.'/resources/lang' => resource_path('lang/vendor/pandoapps'),
+        ]);
 
 
         // Registering package commands.

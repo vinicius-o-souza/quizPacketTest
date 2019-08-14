@@ -14,7 +14,7 @@ class QuestionType extends Model
      *
      * @var string
      */
-    protected $table = 'question_type';
+    protected $table = 'question_types';
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +24,26 @@ class QuestionType extends Model
     protected $fillable = [
         'name',
         'description',
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'          => 'integer',
+        'name'        => 'string',
+        'description' => 'string'
+    ];
+
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required'
     ];
 
     /**

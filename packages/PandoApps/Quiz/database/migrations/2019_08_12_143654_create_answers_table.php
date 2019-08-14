@@ -15,22 +15,27 @@ class CreateAnswersTable extends Migration
     {
         /**
          * Tabela de respostas:
-         *    title                       => resposta do usuário,
+         *    description                 => resposta do usuário,
+         *    score                       => nota da resposta,
+         *    file                        => arquivo contendo a resposta caso a questão seja do tipo attachment,
          *    question_id                 => id da questão associada,
-         *    user_identification_id      => id do usuario que respondeu
+         *    model_has_questionnaire_id  => id da relação de questionario e modelo que respondeu o questionário
          */
-        Schema::create('answers', function (Blueprint $table) {
+
+        $tableNames = config('quiz.table_names');
+        Schema::create('answers', function (Blueprint $table) use($tableNames) {
             $table->bigIncrements('id');
-            $table->longText('title');
+            $table->longText('description');
             $table->float('score');
+            $table->string('file');
 
             $table->bigInteger('alternative_id')->unsigned()->nullable();
             $table->bigInteger('question_id')->unsigned();
-            $table->bigInteger('user_identification_id')->unsigned();
+            $table->bigInteger('model_has_questionnaire_id')->unsigned();
 
-            $table->foreign('alternative_id')->references('id')->on('alternatives')->onDelete('restrict');
-            $table->foreign('question_id')->references('id')->on('questions')->onDelete('restrict');
-            $table->foreign('user_identification_id')->references('id')->on('user_identification')->onDelete('restrict');
+            $table->foreign('alternative_id')->references('id')->on('alternatives')->onDelete('cascade');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->foreign('model_has_questionnaire_id')->references('id')->on($tableNames['model_has_questionnaires'])->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

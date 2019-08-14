@@ -17,7 +17,7 @@
                               <strong>Editar Questionário</strong>
                           </div>
                           <div class="card-body">
-                              {!! Form::model($questionnaire, ['route' => ['questionnaires.update', $questionnaire->id], 'method' => 'patch', 'files' => true]) !!}
+                              {!! Form::model($questionnaire, ['route' => ['questionnaires.update', $questionnaire->id], 'method' => 'patch']) !!}
 
                               @include('pandoapps::questionnaires.fields')
 

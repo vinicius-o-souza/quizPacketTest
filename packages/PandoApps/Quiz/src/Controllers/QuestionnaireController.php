@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use PandoApps\Quiz\Models\Questionnaire;
+use PandoApps\Quiz\DataTables\QuestionnaireDataTable;
 
 /**
  *  Essa classe possui métodos para criar, atualizar, excluir e exibir questionários
@@ -17,11 +18,9 @@ class QuestionnaireController extends Controller
     /**
      * Retorna todos os questionários cadastrados
      */
-    public function index()
+    public function index(QuestionnaireDataTable $questionnaireDataTable)
     {
-        $questionnaires = Questionnaire::all();
-
-        return view('pandoapps::questionnaires.index',compact('questionnaires'));
+        return $questionnaireDataTable->render('pandoapps::questionnaires.index');
     }
 
     /**
@@ -41,9 +40,9 @@ class QuestionnaireController extends Controller
     {
         $input = $request->all();
 
-        $questionnaire_validation = Validator::make($input, Questionnaire::$rules);
-        if ($questionnaire_validation->fails()) {
-            $errors = $questionnaire_validation->errors();
+        $questionnaireValidation = Validator::make($input, Questionnaire::$rules);
+        if ($questionnaireValidation->fails()) {
+            $errors = $questionnaireValidation->errors();
             $msg = '';
             foreach($errors->all() as $message) {
                 $msg .= $message . '<br>';
@@ -98,9 +97,9 @@ class QuestionnaireController extends Controller
 
         $input = $request->all();
 
-        $questionnaire_validation = Validator::make($input, Questionnaire::$rules);
-        if ($questionnaire_validation->fails()) {
-            $errors = $questionnaire_validation->errors();
+        $questionnaireValidation = Validator::make($input, Questionnaire::$rules);
+        if ($questionnaireValidation->fails()) {
+            $errors = $questionnaireValidation->errors();
             $msg = '';
             foreach($errors->all() as $message) {
                 $msg .= $message . '<br>';
@@ -124,6 +123,7 @@ class QuestionnaireController extends Controller
     public function show($id)
     {
         $questionnaire = Questionnaire::find($id);
+        dd($questionnaire);
 
         if(empty($questionnaire)) {
             flash('Questionário não encontrado!')->error();

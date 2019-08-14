@@ -22,11 +22,35 @@ class Answer extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
+        'description',
         'question_id',
-        'user_identification_id',
+        'execution_id',
         'score',
         'alternative_id'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'                           => 'integer',
+        'description'                  => 'string',
+        'score'                        => 'float',
+        'execution_id'                 => 'integer',
+        'alternative_id'               => 'integer'
+    ];
+
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'description' => 'required',
+        'alternative_id' => 'required',
+        'execution_id' => 'required'
     ];
 
     /**
@@ -46,10 +70,10 @@ class Answer extends Model
     }
 
     /**
-     * Get the user of the answer.
+     * Get the execution of the answer.
      */
-    public function user()
+    public function execution()
     {
-        return $this->belongsTo(UserIdentification::class);
+        return $this->belongsTo(Execution::class);
     }
 }

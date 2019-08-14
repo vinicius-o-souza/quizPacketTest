@@ -1,120 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <title>{{config('app.name')}}</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Bootstrap v4.1.1 -->
-    <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Datetimepicker v4.17.47 -->
-    <link rel="stylesheet" href="{{ asset('/css/bootstrap-datetimepicker.css') }}">
+    <!-- Scripts -->
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
-    <!-- CoreUI v2.1.9 -->
-    <link rel="stylesheet" href="{{ asset('/css/coreui.min.css') }}">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- CoreUI Datatable Fix v1.0 -->
-    <link rel="stylesheet" href="{{ asset('/css/coreui-datatable-fix.css') }}">
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <!-- CoreUI Icons v0.3.0 -->
-    <link rel="stylesheet" href="{{ asset('/css/coreui-icons.min.css') }}">
-
-    <!-- Font Awesome Free v5.8.1  -->
-    <link rel="stylesheet" href="{{ asset('/css/font-awesome.css') }}">
-
-    <!-- Simple Line Icons v2.4.0 -->
-    <link rel="stylesheet" href="{{ asset('/css/simple-line-icons.css') }}">
-
-    <!-- Flag Icon v3.3.0 -->
-    <link rel="stylesheet" href="{{ asset('/css/flag-icon.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('/css/dataTables.fontAwesome.css') }}">
-
-    <!-- Select2 v4.0.7 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
-
-    <style>
-        .select2 {
-            width: 100%!important;
-        }
-        .highcharts-credits {
-            display:none;
-        }
-    </style>
-
-    @yield('styles')
-
+    @yield('css')
 </head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
 
-    <header class="app-header navbar">
-        <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </header>
+                    </ul>
 
-    <div class="app-body">
-        @include('layouts.sidebar')
-        <main class="main">
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="py-4">
             @yield('content')
         </main>
     </div>
-
-    <footer class="app-footer">
-        <div>
-            <span>Copyright &copy;</span>
-            <a href="https://www.pandoapps.com">PandoApps </a>
-        </div>
-    </footer>
-
-    </body>
-
-
-
-    <!-- jQuery 3.1.1 -->
-    <script src="{{ asset('/js/jquery.min.js') }}"></script>
-
-    <!-- Popper v1.12.9 -->
-    <script src="{{ asset('/js/popper.min.js') }}"></script>
-
-    <!-- Bootstrap v.4.1.1 -->
-    <script src="{{ asset('/js/bootstrap.min.js') }}"></script>
-
-    <!-- Moment v2.20.1 -->
-    <script src="{{ asset('/js/moment.min.js') }}"></script>
-
-    <!-- Datetimepicker v4.17.37 -->
-    <script src="{{ asset('/js/bootstrap-datetimepicker.min.js') }}"></script>
-
-    <!-- CoreUI v2.1.9 -->
-    <script src="{{ asset('/js/coreui.min.js') }}"></script>
-
-    <!-- Select2 v4.0.7 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-
-    <!-- Custom Scripts -->
     @yield('scripts')
-
-    @stack('extra-scripts')
-
-    @stack('highcharts-scripts')
-
-    <script>
-        $.fn.select2.defaults.set( "theme", "bootstrap" );
-        $('.select2').select2({
-            language: {
-                noResults: function() {
-                    return "Nenhum resultado encontrado";
-                }
-            }
-        });
-        $('.nav-item.active').find('.nav-link').addClass('active');
-    </script>
+</body>
 </html>

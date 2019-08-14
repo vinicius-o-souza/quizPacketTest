@@ -1,10 +1,11 @@
 <?php
 
-namespace App\DataTables;
+namespace PandoApps\Quiz\DataTables;
 
-use App\Models\Questionnaire;
-use App\Services\DataTablesDefaults;
+use PandoApps\Quiz\Models\Questionnaire;
+use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 
 class QuestionnaireDataTable extends DataTable

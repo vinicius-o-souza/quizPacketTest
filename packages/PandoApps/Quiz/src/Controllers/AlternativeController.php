@@ -7,7 +7,7 @@ use PandoApps\Quiz\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use Flash;
+use PandoApps\Quiz\DataTables\AlternativeDataTable;
 
 /**
  *  Essa classe possui métodos para criar, atualizar, excluir e exibir alternativas
@@ -19,11 +19,9 @@ class AlternativeController extends Controller
     /**
      * Retorna todas as alternativas cadastradas
      */
-    public function index()
+    public function index(AlternativeDataTable $alternativeDataTable)
     {
-        $alternatives = Alternative::whereHas('question_id',$this->question->id)->get();
-
-        return view('alternatives::index',compact('alternatives'));
+        return $alternativeDataTable->render('pandoapps::alternatives.index');
     }
 
     /**
@@ -31,9 +29,9 @@ class AlternativeController extends Controller
      */
     public function create()
     {
-        $questions = Question::where('questionnaire_id',$this->questionnaire->id)->orderBy('name','asc')->pluck('name','id')->toArray();
+        $questions = Question::where('questionnaire_id', request()->questionnaire_id)->orderBy('title','asc')->pluck('title','id')->toArray();
 
-        return view('alternatives::create', compact('questions'));
+        return view('pandoapps::alternatives.create', compact('questions'));
     }
 
     /**
@@ -43,34 +41,26 @@ class AlternativeController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'       => 'required',
-        'body'        => 'max:255',
-        'question_id' => 'required|exists:questions,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $alternativeValidation = Validator::make($input, Alternative::$rules);
+        if ($alternativeValidation->fails()) {
+            $errors = $alternativeValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
         Alternative::create([
-        'title'       => $data['title'],
-        'body'        => isset($data['body']) ? $data['body'] : '',
-        'question_id' => $data['question_id'],
+            'title'       => $input['title'],
+            'body'        => $input['body'],
+            'question_id' => $input['question_id'],
         ]);
 
-        $response_log['data_success'] = ['message' => 'Alternativa criada com sucesso!'];
-
-        Flash::success('Alternativa criada com sucesso!');
-
-        return $response_log;
+        flash('Alternativa criada com sucesso!')->success();
     }
 
     /**
@@ -82,14 +72,13 @@ class AlternativeController extends Controller
     {
         $alternative = Alternative::find($id);
 
-        if(empty($alternative))
-        {
-        Flash::error('Alternativa não encontrada!');
+        if(empty($alternative)) {
+            flash('Alternativa não encontrada!')->error();
 
-        return redirect(route('alternatives.index'));
+            return redirect(route('alternatives.index'));
         }
 
-        return view('alternatives::edit', compact('alternative'));
+        return view('pandoapps::alternatives.edit', compact('alternative'));
     }
 
     /**
@@ -102,33 +91,28 @@ class AlternativeController extends Controller
     {
         $alternative = Alternative::find($id);
 
-        if(empty($alternative))
-        {
-        Flash::error('Alternativa não encontrada!');
+        if(empty($alternative)) {
+            flash('Alternativa não encontrada!')->error();
 
-        return redirect(route('alternatives.index'));
+            return redirect(route('alternatives.index'));
         }
 
-        $data = $request->all();
+        $input = $request->all();
 
-        $rules = [
-        'title'       => 'required',
-        'body'        => 'max:255',
-        'question_id' => 'required|exists:questions,id'
-        ];
-
-        $validation = Validator::make($data, $rules);
-
-        if($validation->fails())
-        {
-        $response_log["data_validation"] = ["message" => 'Requisição inválida', "errors" => $validation->errors()];
-
-        return $response_log;
+        $alternativeValidation = Validator::make($input, Alternative::$rules);
+        if ($alternativeValidation->fails()) {
+            $errors = $alternativeValidation->errors();
+            $msg = '';
+            foreach($errors->all() as $message) {
+                $msg .= $message . '<br>';
+            }
+            flash($msg)->error();
+            return redirect()->back()->withInput();
         }
 
-        $alternative->update($data);
+        $alternative->update($input);
 
-        Flash::success('Alternativa atualizada com sucesso!');
+        flash('Alternativa atualizada com sucesso!')->success();
 
         return redirect(route('alternatives.index'));
     }
@@ -142,14 +126,13 @@ class AlternativeController extends Controller
     {
         $alternative = Alternative::find($id);
 
-        if(empty($alternative))
-        {
-        Flash::error('Alternativa não encontrada!');
+        if(empty($alternative)) {
+            flash('Alternativa não encontrada!')->error();
 
-        return redirect(route('alternatives.index'));
+            return redirect(route('alternatives.index'));
         }
 
-        return view('alternatives::show', compact('alternative'));
+        return view('pandoapps::alternatives.show', compact('alternative'));
     }
 
     /**
@@ -161,17 +144,16 @@ class AlternativeController extends Controller
     {
         $alternative = Alternative::find($id);
 
-        if(empty($alternative))
-        {
-        Flash::error('Alternativa não encontrada!');
+        if(empty($alternative)) {
+            flash('Alternativa não encontrada!')->error();
 
-        return redirect(route('alternatives.index'));
+            return redirect(route('alternatives.index'));
         }
 
         $id = $alternative->id;
         $alternative->delete();
 
-        Flash::success('Alternativa deletada com sucesso!');
+        flash('Alternativa deletada com sucesso!')->success();
 
         return redirect(route('alternatives.index', $id));
     }

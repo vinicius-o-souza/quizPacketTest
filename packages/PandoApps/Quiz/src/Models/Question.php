@@ -33,6 +33,34 @@ class Question extends Model
     ];
 
     /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'                => 'integer',
+        'title'             => 'string',
+        'body'              => 'string',
+        'hint'              => 'string',
+        'is_required'       => 'boolean',
+        'is_active'         => 'boolean',
+        'weight'            => 'float',
+        'question_type_id'  => 'integer',
+        'questionnaire_id'  => 'integer',
+    ];
+
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'title' => 'required',
+        'is_required' => 'required',
+        'weight' => 'required',
+    ];
+
+    /**
      * Get the questionnaires of the question.
      */
     public function questionnaire()

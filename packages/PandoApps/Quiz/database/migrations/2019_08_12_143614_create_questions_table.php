@@ -36,8 +36,8 @@ class CreateQuestionsTable extends Migration
             $table->bigInteger('questionnaire_id')->unsigned();
             $table->bigInteger('question_type_id')->unsigned();
 
-            $table->foreign('questionnaire_id')->references('id')->on('questionnaires')->onDelete('restrict');
-            $table->foreign('question_type_id')->references('id')->on('question_types')->onDelete('restrict');
+            $table->foreign('questionnaire_id')->references('id')->on('questionnaires')->onDelete('cascade');
+            $table->foreign('question_type_id')->references('id')->on('question_types')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

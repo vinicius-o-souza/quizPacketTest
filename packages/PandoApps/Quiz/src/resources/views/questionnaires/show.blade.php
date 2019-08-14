@@ -16,7 +16,7 @@
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
                                 <strong>Detalhes</strong>
-                                <a href="{!! route('question_type.index') !!}" class="btn btn-primary ml-3">Voltar</a>
+                                <a href="{!! route('questionnaires.index') !!}" class="btn btn-primary ml-3">Voltar</a>
                             </div>
                             <div class="card-body">
                                 @include('pandoapps::questionnaires.show')

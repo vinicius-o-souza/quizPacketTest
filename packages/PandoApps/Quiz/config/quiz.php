@@ -1,5 +1,25 @@
 <?php
 
 return [
-    //
+
+    'models' => [
+
+        /*
+        *   Tipo do Modelo que responderá o questionário
+        */
+        'execution_type' => App\User::class,
+
+        /*
+        *   Tipo do Modelo que pertence o questionário
+        */
+        'parent_questionnaire_type' => App\User::class
+
+    ],
+
+    'question_types' => [
+
+        'OPEN'          => ['id' => 1, 'name' => 'Questão aberta', 'description' => 'Questão com resposta livre para o usuário'],
+        'CLOSED'        => ['id' => 2, 'name' => 'Questão fechada', 'description' => 'Questão fechada com alternativas de respostas para o usuário'],
+
+    ]
 ];

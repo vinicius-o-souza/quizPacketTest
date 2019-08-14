@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use PandoApps\Quiz\Models\Questionnaire;
 
 class User extends Authenticatable
 {
@@ -36,4 +36,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the polymorfic model for the questionnaire.
+     */
+    public function questionnaire()
+    {
+        return $this->morphedByMany(config('quiz.models.type'), 'model', 'model_has_questionnaires', 'model_id');
+    }
+
 }

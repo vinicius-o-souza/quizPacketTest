@@ -57,10 +57,10 @@ class Questionnaire extends Model
     }
 
     /**
-     * Get the users_identification for the questionnaire.
+     * Get the polymorfic model for the questionnaire.
      */
-    public function users_identification()
+    public function model_questionnaire()
     {
-        return $this->hasMany(UserIdentification::class);
+        return $this->morphedByMany(config('quiz.models.type'), 'model', 'model_has_questionnaires', 'model_id', 'questionnaire_id');
     }
 }
