@@ -18,14 +18,14 @@
 
 <!-- Is Required Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('is_required', 'Resposta obrigatória?') !!}
-    <p>{!! $questionnaire->is_required ? 'Sim' : 'Não' !!}</p>
+    {!! Form::label('is_required', 'Questão obrigatória?') !!}
+    <p>{!! $question->is_required ? 'Sim' : 'Não' !!}</p>
 </div>
 
 <!-- Is Active Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('is_active', 'Resposta ativa?') !!}
-    <p>{!! $questionnaire->is_active ? 'Sim' : 'Não' !!}</p>
+    {!! Form::label('is_active', 'Questão ativa?') !!}
+    <p>{!! $question->is_active ? 'Sim' : 'Não' !!}</p>
 </div>
 
 <!-- Weight Field -->

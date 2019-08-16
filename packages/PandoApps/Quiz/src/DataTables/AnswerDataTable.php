@@ -17,10 +17,17 @@ class AnswerDataTable extends DataTable
      */
     public function dataTable()
     {
-        $answers = Answer::all();
+        $question_id = request()->question_id;
+        $answers = Answer::where('question_id', $question_id)->with('questions')->with('alternatives')->get();
 
         return Datatables::of($answers)
             ->addColumn('action' , 'pandoapps::answers.datatables_actions')
+            ->addColumn('question', function(Answer $answer) {
+                return $answer->question->title;
+            })
+            ->addColumn('alternative', function(Answer $answer) {
+                return $answer->alternative->title;
+            })
             ->rawColumns(['action']);
     }
 
@@ -46,8 +53,11 @@ class AnswerDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name'          => ['title' => 'Nome'],
-            'is_active'     => ['title' => 'Ativo']
+            'question'      => ['title' => 'Questão'],
+            'description'   => ['title' => 'Descrição'],
+            'alternative'   => ['title' => 'Alternativa'],
+            'score'         => ['title' => 'Pontuação'],
+            'alternativa'   => ['title' => 'Alternativa']
         ];
     }
 

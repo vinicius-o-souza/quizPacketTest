@@ -7,7 +7,7 @@
 <!-- Answer Once Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('answer_once', 'Resposta única?') !!}
-    {!! Form::checkbox('answer_once', null, ['class' => 'form-control']) !!}
+    {!! Form::checkbox('answer_once', null, null) !!}
 </div>
 
 <!-- Submit Field -->

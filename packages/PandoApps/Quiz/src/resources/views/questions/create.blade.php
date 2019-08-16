@@ -1,32 +1,30 @@
-@extends('layouts.app')
+@extends('pandoapps::layouts.app')
 
-@section('content')
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-         <a href="{!! route('questions.index', ['questionnaire_id' => request()->questionnaire_id]) !!}">Questões</a>
-      </li>
-      <li class="breadcrumb-item active">Cadastrar</li>
-    </ol>
-     <div class="container-fluid">
-          <div class="animated fadeIn">
+@section('content_pandoapps')
+    <section class="content-header">
+        <h1 class="pull-left"> Questões</h1>
+        <h1 class="pull-right">
+            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('questions.index', ['questionnaire_id' => request()->questionnaire_id]) !!}">Voltar</a>
+        </h1>
+    </section>
+    <div class="content">
+        <div class="clearfix"></div>
+
+        @include('flash::message')
+        @include('pandoapps::flash-message')
+
+        <div class="clearfix"></div>
+        <div class="box box-primary">
+
+            <div class="box-body">
                 <div class="row">
-                    <div class="col-lg-12">
-                        @include('flash::message')
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Cadastrar Questões</strong>
-                            </div>
-                            <div class="card-body">
-                                {!! Form::open(['route' => ['questions.store', request()->questionnaire_id]]) !!}
+                    {!! Form::open(['route' => ['questions.store', request()->questionnaire_id]]) !!}
 
-                                   @include('pandoapps::questions.fields')
+                        @include('pandoapps::questions.fields')
 
-                                {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
+                    {!! Form::close() !!}
                 </div>
-           </div>
+            </div>
+        </div>
     </div>
 @endsection

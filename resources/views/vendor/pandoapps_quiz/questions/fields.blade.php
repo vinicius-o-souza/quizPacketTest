@@ -24,13 +24,13 @@
 
 <!-- Is Required Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('is_required', 'Resposta obrigatória?') !!}
+    {!! Form::label('is_required', 'Questão obrigatória?') !!}
     {!! Form::checkbox('is_required', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Is Active Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('is_active', 'Resposta ativa?') !!}
+    {!! Form::label('is_active', 'Questão ativa?') !!}
     {!! Form::checkbox('is_active', null, ['class' => 'form-control']) !!}
 </div>
 

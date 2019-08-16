@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('pandoapps::layouts.app')
 
-@section('content')
+@section('content_pandoapps')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Alternativas</li>
     </ol>

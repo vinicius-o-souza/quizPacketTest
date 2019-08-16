@@ -58,6 +58,7 @@ class Question extends Model
         'title' => 'required',
         'is_required' => 'required',
         'weight' => 'required',
+        'question_type_id' => 'required'
     ];
 
     /**

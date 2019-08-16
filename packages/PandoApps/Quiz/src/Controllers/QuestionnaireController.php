@@ -73,7 +73,7 @@ class QuestionnaireController extends Controller
         if(empty($questionnaire)) {
             flash('Questionário não encontrado!')->error();
 
-            return redirect(route('questionnaires.index', $questionnaire->id));
+            return redirect(route('questionnaires.index'));
         }
 
         return view('pandoapps::questionnaires.edit', compact('questionnaire'));
@@ -108,11 +108,16 @@ class QuestionnaireController extends Controller
             return redirect()->back()->withInput();
         }
 
+        if(isset($input['answer_once'])) {
+            $input['answer_once'] = true;
+        } else {
+            $input['answer_once'] = false;
+        }
         $questionnaire->update($input);
 
         flash('Questionário atualizado com sucesso!')->success();
 
-        return redirect(route('questionnaires.index', $questionnaire->id));
+        return redirect(route('questionnaires.index'));
     }
 
     /**
@@ -123,12 +128,11 @@ class QuestionnaireController extends Controller
     public function show($id)
     {
         $questionnaire = Questionnaire::find($id);
-        dd($questionnaire);
 
         if(empty($questionnaire)) {
             flash('Questionário não encontrado!')->error();
 
-            return redirect(route('questionnaires.index', $questionnaire->id));
+            return redirect(route('questionnaires.index'));
         }
 
         return view('pandoapps::questionnaires.show', compact('questionnaire'));
@@ -146,14 +150,13 @@ class QuestionnaireController extends Controller
         if(empty($questionnaire)) {
             flash('Questionário não encontrado!')->error();
 
-            return redirect(route('questionnaires.index', $questionnaire->id));
+            return redirect(route('questionnaires.index'));
         }
 
-        $id = $questionnaire->id;
         $questionnaire->delete();
 
         flash('Questionário deletado com sucesso!')->success();
 
-        return redirect(route('questionnaires.index', $id));
+        return redirect(route('questionnaires.index'));
     }
 }

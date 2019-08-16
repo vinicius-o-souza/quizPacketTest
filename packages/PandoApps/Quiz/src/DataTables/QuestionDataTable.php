@@ -25,7 +25,13 @@ class QuestionDataTable extends DataTable
             ->addColumn('question_type', function(Question $question) {
                 return $question->question_type->name;
             })
-            ->rawColumns(['action', 'question_type']);
+            ->editColumn('is_active', function(Question $question) {
+                return $question->is_active ? 'Sim' : 'Não';
+            })
+            ->editColumn('is_required', function(Question $question) {
+                return $question->is_required ? 'Sim' : 'Não';
+            })
+            ->rawColumns(['action', 'question_type', 'is_active', 'is_required']);
     }
 
     /**
@@ -56,7 +62,7 @@ class QuestionDataTable extends DataTable
             'hint'              => ['title' => 'Dica'],
             'weight'            => ['title' => 'Peso'],
             'is_required'       => ['title' => 'Obrigatória'],
-            'is_active'         => ['title' => 'Ativo']
+            'is_active'         => ['title' => 'Ativa']
         ];
     }
 

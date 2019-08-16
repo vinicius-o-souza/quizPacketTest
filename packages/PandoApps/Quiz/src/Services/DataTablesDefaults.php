@@ -33,7 +33,6 @@ class DataTablesDefaults
                 [0, 'asc']
             ],
             'pageLength' => 25,
-            'scrollX' => false,
             'buttons' => [
                 'print',
                 'reload',

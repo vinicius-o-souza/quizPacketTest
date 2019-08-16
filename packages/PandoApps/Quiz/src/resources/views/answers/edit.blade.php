@@ -1,31 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-    <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-             <a href="{!! route('answers.index') !!}">Resposta</a>
-          </li>
-          <li class="breadcrumb-item active">Editar</li>
-        </ol>
-    <div class="container-fluid">
-         <div class="animated fadeIn">
-             <div class="row">
-                 <div class="col-lg-12">
-                      <div class="card">
-                          <div class="card-header">
-                              <i class="fa fa-edit fa-lg"></i>
-                              <strong>Editar Resposta</strong>
-                          </div>
-                          <div class="card-body">
-                              {!! Form::model($answer, ['route' => ['answers.update', $answer->id], 'method' => 'patch']) !!}
+    <section class="content-header">
+        <h1 class="pull-left"> Resposta</h1>
+        <h1 class="pull-right">
+            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('answers.index') !!}">Voltar</a>
+        </h1>
+    </section>
+    <div class="content">
+        <div class="clearfix"></div>
 
-                              @include('pandoapps::answers.fields')
+        @include('flash::message')
+        @include('pandoapps::flash-message')
 
-                              {!! Form::close() !!}
-                            </div>
-                        </div>
-                    </div>
+        <div class="clearfix"></div>
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    {!! Form::model($answer, ['route' => ['answers.update', $answer->id], 'method' => 'patch']) !!}
+
+                        @include('pandoapps::answers.fields')
+
+                    {!! Form::close() !!}
                 </div>
-         </div>
+            </div>
+        </div>
     </div>
 @endsection

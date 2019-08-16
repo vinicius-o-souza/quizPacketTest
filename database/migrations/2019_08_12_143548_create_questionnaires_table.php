@@ -24,6 +24,10 @@ class CreateQuestionnairesTable extends Migration
             $table->boolean('is_active')->default(true);
             $table->string('name');
             $table->boolean('answer_once')->default(false);
+
+            $table->integer('model_key')->nullable();
+            $table->string('model_type')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

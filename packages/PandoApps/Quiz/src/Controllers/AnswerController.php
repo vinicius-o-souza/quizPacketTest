@@ -7,6 +7,7 @@ use PandoApps\Quiz\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use PandoApps\Quiz\DataTables\AnswerDataTable;
 
 /**
  *  Essa classe possui métodos para criar, atualizar, excluir e exibir respostas
@@ -18,11 +19,9 @@ class AnswerController extends Controller
     /**
      * Retorna todas as respostas cadastradas
      */
-    public function index()
+    public function index(AnswerDataTable $answerDataTable)
     {
-        $answers = Answer::whereHas('question_id', request()->question_id)->get();
-
-        return view('pandoapps::answers.index',compact('answers'));
+        return $answerDataTable->render('pandoapps::answers.index');
     }
 
     /**

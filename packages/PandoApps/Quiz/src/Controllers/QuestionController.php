@@ -22,7 +22,6 @@ class QuestionController extends Controller
     public function index(QuestionDataTable $questionDataTable)
     {
         return $questionDataTable->render('pandoapps::questions.index');
-        // return view('pandoapps::questions.index',compact('questions'));
     }
 
     /**
@@ -78,13 +77,15 @@ class QuestionController extends Controller
     {
         $question = Question::find($id);
 
+        $questionsType = QuestionType::orderBy('name','asc')->pluck('name','id')->toArray();
+
         if(empty($question)) {
             flash('Questão não encontrada!')->error();
 
             return redirect(route('questions.index'));
         }
 
-        return view('pandoapps::questions.edit', compact('question'));
+        return view('pandoapps::questions.edit', compact('question', 'questionsType'));
     }
 
     /**
@@ -120,7 +121,7 @@ class QuestionController extends Controller
 
         flash('Questão atualizada com sucesso!')->success();
 
-        return redirect(route('questions.index'));
+        return redirect(route('questions.index', request()->questionnaire_id));
     }
 
     /**
@@ -161,6 +162,6 @@ class QuestionController extends Controller
 
         flash('Questão deletada com sucesso!')->success();
 
-        return redirect(route('questions.index'));
+        return redirect(route('questions.index', request()->questionnaire_id));
     }
 }

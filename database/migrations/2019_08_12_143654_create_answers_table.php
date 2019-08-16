@@ -19,7 +19,7 @@ class CreateAnswersTable extends Migration
          *    score                       => nota da resposta,
          *    file                        => arquivo contendo a resposta caso a questão seja do tipo attachment,
          *    question_id                 => id da questão associada,
-         *    response_id  => id da relação de questionario e modelo que respondeu o questionário
+         *    model_has_questionnaire_id  => id da relação de questionario e modelo que respondeu o questionário
          */
 
         $tableNames = config('quiz.table_names');
@@ -31,11 +31,11 @@ class CreateAnswersTable extends Migration
 
             $table->bigInteger('alternative_id')->unsigned()->nullable();
             $table->bigInteger('question_id')->unsigned();
-            $table->bigInteger('response_id')->unsigned();
+            $table->bigInteger('model_has_questionnaire_id')->unsigned();
 
             $table->foreign('alternative_id')->references('id')->on('alternatives')->onDelete('cascade');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('response_id')->references('id')->on($tableNames['response'])->onDelete('cascade');
+            $table->foreign('model_has_questionnaire_id')->references('id')->on($tableNames['model_has_questionnaires'])->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
