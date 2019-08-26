@@ -1,17 +1,23 @@
-<!-- Name Field -->
+<!-- Description Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('name', 'Nome:') !!}
-    {!! Form::text('name', null, ['class' => 'form-control']) !!}
+    {!! Form::label('description', 'Descrição:') !!}
+    {!! Form::text('description', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Answer Once Field -->
+<!-- Value Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('answer_once', 'Resposta única?') !!}
-    {!! Form::checkbox('answer_once', null, ['class' => 'form-control']) !!}
+    {!! Form::label('value', 'Peso da alternativa:') !!}
+    {!! Form::number('value', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Is Correct Field -->
+<div class="form-group col-sm-12">
+    {!! Form::label('is_correct', 'Resposta correta?') !!}
+    {!! Form::checkbox('is_correct', null, null) !!}
 </div>
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Salvar', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('questionnaires.index') !!}" class="btn btn-default">Cancelar</a>
+    <a href="{!! route('alternatives.index') !!}" class="btn btn-default">Cancelar</a>
 </div>

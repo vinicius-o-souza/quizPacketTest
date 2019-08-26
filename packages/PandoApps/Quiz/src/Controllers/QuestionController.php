@@ -9,23 +9,24 @@ use PandoApps\Quiz\Models\Question;
 use PandoApps\Quiz\Models\QuestionType;
 use PandoApps\Quiz\DataTables\QuestionDataTable;
 
-/**
- *  Essa classe possui métodos para criar, atualizar, excluir e exibir questões
- *  @author Rauhann Chaves <rauhann2711@gmail.com>
- */
 class QuestionController extends Controller
 {
 
     /**
-     * Retorna todas as questões cadastradas
-     */
+     * Display a listing of the resource.
+     *
+     * @param QuestionDataTable $questionDataTable
+     * @return \Illuminate\Http\Response
+     */    
     public function index(QuestionDataTable $questionDataTable)
     {
         return $questionDataTable->render('pandoapps::questions.index');
     }
 
     /**
-     * Redireciona para a tela de cadastrar uma questão
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -35,9 +36,10 @@ class QuestionController extends Controller
     }
 
     /**
-     * Salva uma questão
-     * @param Request $request
-     * @return mixed
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -56,7 +58,7 @@ class QuestionController extends Controller
 
         Question::create([
             'title'            => $input['title'],
-            'body'             => $input['body'],
+            'description'      => $input['description'],
             'hint'             => isset($input['hint']) ? $input['hint'] : '',
             'is_required'      => isset($input['is_required']) ? true : '',
             'questionnaire_id' => request()->questionnaire_id,
@@ -67,11 +69,31 @@ class QuestionController extends Controller
 
         return redirect(route('questions.index', request()->questionnaire_id));
     }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $question = Question::find($id);
+
+        if(empty($question)) {
+            flash('Questão não encontrada!')->error();
+
+            return redirect(route('questions.index'));
+        }
+
+        return view('pandoapps::questions.show', compact('question'));
+    }
 
     /**
-     * Exibe a questão para edição
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -89,10 +111,11 @@ class QuestionController extends Controller
     }
 
     /**
-     * Atualiza uma questão
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
@@ -125,27 +148,10 @@ class QuestionController extends Controller
     }
 
     /**
-     * Exibe uma questão pelo id
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $question = Question::find($id);
-
-        if(empty($question)) {
-            flash('Questão não encontrada!')->error();
-
-            return redirect(route('questions.index'));
-        }
-
-        return view('pandoapps::questions.show', compact('question'));
-    }
-
-    /**
-     * Deleta uma questão (softdelete)
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
@@ -160,6 +166,9 @@ class QuestionController extends Controller
         $id = $question->id;
         $question->delete();
 
+        if(request()->ajax()) {
+            return response()->json(['status' => 'Questão deletada']);
+        } 
         flash('Questão deletada com sucesso!')->success();
 
         return redirect(route('questions.index', request()->questionnaire_id));

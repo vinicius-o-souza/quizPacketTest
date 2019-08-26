@@ -19,7 +19,7 @@
                                 <a href="{!! route('alternatives.index') !!}" class="btn btn-primary ml-3">Voltar</a>
                             </div>
                             <div class="card-body">
-                                @include('pandoapps::alternatives.show')
+                                @include('pandoapps::alternatives.show_fields')
                             </div>
                         </div>
                     </div>

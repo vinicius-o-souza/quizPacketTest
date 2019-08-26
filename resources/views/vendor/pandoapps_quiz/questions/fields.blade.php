@@ -4,16 +4,10 @@
     {!! Form::select('question_type_id', ['' => 'Selecione um tipo de questão'] + $questionsType, null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Title Field -->
+<!-- Description Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('title', 'Título:') !!}
-    {!! Form::text('title', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Body Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('body', 'Descrição:') !!}
-    {!! Form::text('body', null, ['class' => 'form-control']) !!}
+    {!! Form::label('decription', 'Descrição:') !!}
+    {!! Form::text('description', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Hint Field -->
@@ -25,13 +19,13 @@
 <!-- Is Required Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('is_required', 'Questão obrigatória?') !!}
-    {!! Form::checkbox('is_required', null, ['class' => 'form-control']) !!}
+    {!! Form::checkbox('is_required', null, null) !!}
 </div>
 
 <!-- Is Active Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('is_active', 'Questão ativa?') !!}
-    {!! Form::checkbox('is_active', null, ['class' => 'form-control']) !!}
+    {!! Form::checkbox('is_active', null, null) !!}
 </div>
 
 <!-- Weight Field -->

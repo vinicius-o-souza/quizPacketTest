@@ -3,16 +3,23 @@
 return [
 
     'models' => [
+        
 
         /*
         *   Tipo do Modelo que responderá o questionário
         */
-        'execution_type' => App\User::class,
+        'questionnaire' => PandoApps\Quiz\Models\Questionnaire::class,
+        
+
+        /*
+        *   Tipo do Modelo que responderá o questionário
+        */
+        'executable' => App\User::class,
 
         /*
         *   Tipo do Modelo que pertence o questionário
         */
-        'parent_questionnaire_type' => App\User::class
+        'parent_questionnaire' => App\User::class
 
     ],
 

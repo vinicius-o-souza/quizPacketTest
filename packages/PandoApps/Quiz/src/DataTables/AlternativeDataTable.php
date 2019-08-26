@@ -18,12 +18,20 @@ class AlternativeDataTable extends DataTable
     public function dataTable()
     {
         $question_id = request()->question_id;
-        $alternatives = Alternative::where('question_id', $question_id)->with('questions')->get();
-
+        
+        if($question_id) {
+            $alternatives = Alternative::where('question_id', $question_id)->with('question')->get();    
+        } else {
+            $alternatives = Alternative::all();
+        }
+        
         return Datatables::of($alternatives)
             ->addColumn('action' , 'pandoapps::alternatives.datatables_actions')
             ->addColumn('question', function(Alternative $alternative) {
-                return $alternative->question->title;
+                return $alternative->question->description;
+            })
+            ->editColumn('is_correct', function(Alternative $alternative) {
+                return $alternative->is_correct ? 'Sim' : 'Não';
             })
             ->rawColumns(['action', 'question']);
     }
@@ -51,9 +59,9 @@ class AlternativeDataTable extends DataTable
     {
         return [
             'question'      => ['title' => 'Questão'],
-            'title'         => ['title' => 'Título'],
-            'body'          => ['title' => 'Descrição'],
+            'description'   => ['title' => 'Descrição'],
             'value'         => ['title' => 'Valor'],
+            'is_correct'    => ['title' => 'Correta?']
         ];
     }
 

@@ -17,7 +17,7 @@ class QuestionnaireDataTable extends DataTable
      */
     public function dataTable()
     {
-        $questionnaires = Questionnaire::all();
+        $questionnaires = Questionnaire::with('executables')->get();
 
         return Datatables::of($questionnaires)
             ->addColumn('action', 'pandoapps::questionnaires.datatables_actions')
@@ -28,7 +28,7 @@ class QuestionnaireDataTable extends DataTable
                 return $questionnaire->answer_once ? 'Sim' : 'Não';
             })
             ->addColumn('questions', function(Questionnaire $questionnaire) {
-                return '<a href="'. route('questions.index', $questionnaire->id) .'"> Questões </a>';
+                return '<a href="'. route('questions.index', ['questionnaire_id' => $questionnaire->id]) .'"> Questões </a>';
             })
             ->rawColumns(['action', 'is_active', 'answer_once', 'questions']);
     }

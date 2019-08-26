@@ -50,7 +50,6 @@ return [
     'create_menu_option'              => 'Criar Opção no Menu Lateral',
     'delete_photo'                    => 'Excluir Imagem',
     'cnpj'                            => 'CNPJ',
-    
     'category_ids'                    => 'Categorias',
     'role_id'                         => 'Perfil',
     'status_user_id'                  => 'Status do Usuário',

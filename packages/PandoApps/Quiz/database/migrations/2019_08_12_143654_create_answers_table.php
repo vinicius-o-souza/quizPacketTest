@@ -22,23 +22,20 @@ class CreateAnswersTable extends Migration
          *    model_has_questionnaire_id  => id da relação de questionario e modelo que respondeu o questionário
          */
 
-        $tableNames = config('quiz.table_names');
-        Schema::create('answers', function (Blueprint $table) use($tableNames) {
+        Schema::create('answers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('description');
-            $table->float('score');
-            $table->string('file');
+            $table->longText('description')->nullable();
+            $table->float('score')->nullable();
 
             $table->bigInteger('alternative_id')->unsigned()->nullable();
             $table->bigInteger('question_id')->unsigned();
-            $table->bigInteger('model_has_questionnaire_id')->unsigned();
+            $table->bigInteger('executable_id')->unsigned();
 
             $table->foreign('alternative_id')->references('id')->on('alternatives')->onDelete('cascade');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('model_has_questionnaire_id')->references('id')->on($tableNames['model_has_questionnaires'])->onDelete('cascade');
+            $table->foreign('executable_id')->references('id')->on('executables')->onDelete('cascade');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

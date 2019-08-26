@@ -3,11 +3,9 @@
 namespace PandoApps\Quiz\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Answer extends Model
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -24,7 +22,7 @@ class Answer extends Model
     protected $fillable = [
         'description',
         'question_id',
-        'execution_id',
+        'executable_id',
         'score',
         'alternative_id'
     ];
@@ -38,7 +36,7 @@ class Answer extends Model
         'id'                           => 'integer',
         'description'                  => 'string',
         'score'                        => 'float',
-        'execution_id'                 => 'integer',
+        'executable_id'                 => 'integer',
         'alternative_id'               => 'integer'
     ];
 
@@ -49,8 +47,7 @@ class Answer extends Model
      */
     public static $rules = [
         'description' => 'required',
-        'alternative_id' => 'required',
-        'execution_id' => 'required'
+        'executable_id' => 'required'
     ];
 
     /**
@@ -72,8 +69,8 @@ class Answer extends Model
     /**
      * Get the execution of the answer.
      */
-    public function execution()
+    public function executable()
     {
-        return $this->belongsTo(Execution::class);
+        return $this->belongsTo(Executable::class);
     }
 }

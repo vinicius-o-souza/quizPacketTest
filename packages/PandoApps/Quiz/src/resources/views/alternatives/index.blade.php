@@ -14,7 +14,6 @@
                         <div class="card-header">
                             <i class="fa fa-align-justify"></i>
                             Alternativas
-                            <a class="pull-right" href="{!! route('alternatives.create', ['questionnaire_id' => request()->questionnaire_id, 'question_id' => request()->question_id]) !!}"><i class="fa fa-plus-square fa-lg text-success"></i></a>
                         </div>
                         <div class="card-body">
                             <div class="pull-right mr-3">

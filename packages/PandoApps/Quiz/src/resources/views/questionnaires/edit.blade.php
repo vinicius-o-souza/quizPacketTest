@@ -17,7 +17,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::model($questionnaire, ['route' => ['questionnaires.update', $questionnaire->id], 'method' => 'patch']) !!}
+                    {!! Form::model($questionnaire, ['route' => ['questionnaires.update', $questionnaire->id], 'method' => 'patch', 'class' => 'w-100']) !!}
 
                         @include('pandoapps::questionnaires.fields')
 

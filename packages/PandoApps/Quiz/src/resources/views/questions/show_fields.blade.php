@@ -1,13 +1,7 @@
-<!-- Title Field -->
+<!-- Description Field -->
 <div class="form-group col-sm-12">
-    {!! Form::label('title', 'Título:') !!}
-    <p> {!! $question->title !!}</p>
-</div>
-
-<!-- Body Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('body', 'Descrição:') !!}
-    <p> {!! $question->body !!}</p>
+    {!! Form::label('description', 'Descrição:') !!}
+    <p> {!! $question->description !!}</p>
 </div>
 
 <!-- Hint Field -->

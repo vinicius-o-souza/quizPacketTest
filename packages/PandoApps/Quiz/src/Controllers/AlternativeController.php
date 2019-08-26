@@ -9,15 +9,14 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use PandoApps\Quiz\DataTables\AlternativeDataTable;
 
-/**
- *  Essa classe possui métodos para criar, atualizar, excluir e exibir alternativas
- *  @author Rauhann Chaves <rauhann2711@gmail.com>
- */
 class AlternativeController extends Controller
 {
 
     /**
-     * Retorna todas as alternativas cadastradas
+     * Display a listing of the resource.
+     *
+     * @param AlternativeDataTable $alternativeDataTable
+     * @return \Illuminate\Http\Response
      */
     public function index(AlternativeDataTable $alternativeDataTable)
     {
@@ -25,7 +24,9 @@ class AlternativeController extends Controller
     }
 
     /**
-     * Redireciona para a tela de cadastrar uma alternativa
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -34,10 +35,11 @@ class AlternativeController extends Controller
         return view('pandoapps::alternatives.create', compact('questions'));
     }
 
-    /**
-     * Salva uma alternativa
-     * @param Request $request
-     * @return mixed
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -55,18 +57,37 @@ class AlternativeController extends Controller
         }
 
         Alternative::create([
-            'title'       => $input['title'],
-            'body'        => $input['body'],
+            'description' => $input['description'],
             'question_id' => $input['question_id'],
         ]);
 
         flash('Alternativa criada com sucesso!')->success();
     }
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $alternative = Alternative::find($id);
+
+        if(empty($alternative)) {
+            flash('Alternativa não encontrada!')->error();
+
+            return redirect(route('alternatives.index'));
+        }
+
+        return view('pandoapps::alternatives.show', compact('alternative'));
+    }
 
     /**
-     * Exibe a alternativa para edição
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -82,10 +103,11 @@ class AlternativeController extends Controller
     }
 
     /**
-     * Atualiza uma alternativa
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
@@ -112,33 +134,20 @@ class AlternativeController extends Controller
 
         $alternative->update($input);
 
+        if(request()->ajax()) {
+            return response()->json(['status' => 'Questão deletada']);
+        }
+        
         flash('Alternativa atualizada com sucesso!')->success();
 
         return redirect(route('alternatives.index'));
     }
 
     /**
-     * Exibe uma alternativa pelo id
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $alternative = Alternative::find($id);
-
-        if(empty($alternative)) {
-            flash('Alternativa não encontrada!')->error();
-
-            return redirect(route('alternatives.index'));
-        }
-
-        return view('pandoapps::alternatives.show', compact('alternative'));
-    }
-
-    /**
-     * Deleta uma alternativa (softdelete)
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
@@ -149,9 +158,20 @@ class AlternativeController extends Controller
 
             return redirect(route('alternatives.index'));
         }
+        
+        $question = $alternative->question;
+        if($question->alternatives()->count() == 1) {
+            flash('Questões fechadas devem ter no mínimo 1 alternativa!')->error();
+
+            return redirect(route('alternatives.index'));
+        }
 
         $id = $alternative->id;
         $alternative->delete();
+        
+        if(request()->ajax()) {
+            return response()->json(['status' => 'Alternativa deletada']);
+        }
 
         flash('Alternativa deletada com sucesso!')->success();
 

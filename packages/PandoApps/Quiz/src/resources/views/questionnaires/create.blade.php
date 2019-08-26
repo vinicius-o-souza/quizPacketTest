@@ -18,7 +18,7 @@
 
             <div class="box-body">
                 <div class="row">
-                    {!! Form::open(['route' => 'questionnaires.store']) !!}
+                    {!! Form::open(['route' => 'questionnaires.store', 'class' => 'w-100']) !!}
 
                         @include('pandoapps::questionnaires.fields')
 

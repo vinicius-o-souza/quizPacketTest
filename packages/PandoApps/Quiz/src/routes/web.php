@@ -4,32 +4,20 @@ Route::resource('questionnaires', 'QuestionnaireController');
 
 Route::resource('question_types', 'QuestionTypeController');
 
-Route::group(['prefix' => 'questionnaires/{questionnaire_id}'], function()
-{
-    /*
-   * Rotas para acesso as questões do questinário
-   */
-    Route::resource('questions', 'QuestionController');
+Route::resource('questions', 'QuestionController');
 
-    /*
-    * Rotas para acesso aos usuários que responderam os questinários
-    */
-    Route::resource('user_identification', 'UserIdentificationController');
+Route::resource('user_identification', 'UserIdentificationController');
 
-    /*
-   * Rotas para acesso as questões do questinário
-   */
-    Route::group(['prefix' => 'questions/{question_id}'], function ()
-    {
-        /*
-        * Rotas para acesso as alternativas
-        */
-        Route::resource('alternatives', 'AlternativeController');
+Route::resource('alternatives', 'AlternativeController');
 
-        /*
-        * Rotas para acesso as respostas
-        */
-        Route::resource('answers', 'AnswerController');
-    });
+Route::resource('answers', 'AnswerController');
 
+Route::group(['prefix' => 'executables'], function () {
+    
+    Route::get('/', 'ExecutableController@index')->name('executables.index');
+    
+    Route::get('{questablenaire_id}/create/{model_id}', 'ExecutableController@create')->name('executables.create');
+    
+    Route::post('{questablenaire_id}/store/{model_id}', 'ExecutableController@store')->name('executables.store');
+    
 });

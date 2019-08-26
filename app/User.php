@@ -40,9 +40,9 @@ class User extends Authenticatable
     /**
      * Get the polymorfic model for the questionnaire.
      */
-    public function questionnaire()
+    public function executions()
     {
-        return $this->morphedByMany(config('quiz.models.type'), 'model', 'model_has_questionnaires', 'model_id');
+        return $this->morphToMany(config('quiz.models.questionnaire'), 'executable')->withPivot('score');
     }
 
 }

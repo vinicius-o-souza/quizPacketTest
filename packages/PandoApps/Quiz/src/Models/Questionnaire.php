@@ -3,11 +3,9 @@
 namespace PandoApps\Quiz\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Questionnaire extends Model
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -25,6 +23,8 @@ class Questionnaire extends Model
         'is_active',
         'name',
         'answer_once',
+        'parent_id',
+        'parent_type'
     ];
 
     /**
@@ -59,8 +59,8 @@ class Questionnaire extends Model
     /**
      * Get the polymorfic model for the questionnaire.
      */
-    public function model_questionnaire()
+    public function executables()
     {
-        return $this->morphedByMany(config('quiz.models.type'), 'model', 'model_has_questionnaires', 'model_id', 'questionnaire_id');
+        return $this->morphedByMany(config('quiz.models.executable'), 'executable')->withPivot('score');
     }
 }

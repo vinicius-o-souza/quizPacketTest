@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExecutionsTable extends Migration
+class CreateExecutablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,21 +15,20 @@ class CreateExecutionsTable extends Migration
     {
         /**
          * Tabela de relação polimorfica do questionário com qualquer modelo
-         *    model_id            => id do modelo,
-         *    model_type          => tipo do modelo,
-         *    questionnaire_id    => id do questionário associado,
+         *    executable_id            => id do modelo,
+         *    executable_type          => tipo do modelo,
+         *    questionnaire_id         => id do questionário
          */
-        Schema::create('executions', function (Blueprint $table) {
+        Schema::create('executables', function (Blueprint $table) {
             $table->bigIncrements('id');
-
-            $table->bigInteger('model_key')->unsigned();
-            $table->string('model_type');
-
+            $table->bigInteger('executable_id');
+            $table->string('executable_type');
+            $table->float('score');
+            
             $table->bigInteger('questionnaire_id')->unsigned();
             $table->foreign('questionnaire_id')->references('id')->on('questionnaires')->onDelete('cascade');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -40,6 +39,6 @@ class CreateExecutionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_identification');
+        Schema::dropIfExists('executables');
     }
 }

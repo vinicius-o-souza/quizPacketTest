@@ -1,29 +1,27 @@
 @extends('pandoapps::layouts.app')
 
 @section('content_pandoapps')
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{!! route('questions.index', ['questionnaire_id' => request()->questionnaire_id]) !!}">Questão</a>
-        </li>
-        <li class="breadcrumb-item active">Editar</li>
-    </ol>
-    <div class="container-fluid">
-        <div class="animated fadeIn">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fa fa-edit fa-lg"></i>
-                            <strong>Editar Questão</strong>
-                        </div>
-                        <div class="card-body">
-                            {!! Form::model($question, ['route' => ['questions.update', request()->questionnaire_id, $question->id], 'method' => 'patch']) !!}
+    <section class="content-header">
+        <h1 class="pull-left"> Questões</h1>
+        <h1 class="pull-right">
+            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('questions.index') !!}">Voltar</a>
+        </h1>
+    </section>
+    <div class="content">
+        <div class="clearfix"></div>
 
-                                @include('pandoapps::questions.fields')
+        @include('flash::message')
+        @include('pandoapps::flash-message')
 
-                            {!! Form::close() !!}
-                        </div>
-                    </div>
+        <div class="clearfix"></div>
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    {!! Form::model($question, ['route' => ['questions.update', $question->id], 'method' => 'patch']) !!}
+
+                        @include('pandoapps::questions.fields')
+
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

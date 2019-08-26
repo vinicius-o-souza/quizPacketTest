@@ -15,22 +15,20 @@ class CreateAlternativesTable extends Migration
     {
         /**
          * Tabela de alternativas:
-         *    title        => descrição da alternativa,
-         *    body         => texto complementar para a alternativa,
+         *    description        => descrição da alternativa,
          *    question_id  => id da questão associada,
          */
         Schema::create('alternatives', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
-            $table->longText('body')->nullable();
+            $table->string('description');
             $table->float('value');
+            $table->boolean('is_correct');
 
             $table->bigInteger('question_id')->unsigned();
 
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

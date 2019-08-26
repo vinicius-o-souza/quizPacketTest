@@ -3,18 +3,16 @@
 namespace PandoApps\Quiz\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Execution extends Model
+class Executable extends Model
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'executions';
+    protected $table = 'executables';
 
     /**
      * The attributes that are mass assignable.
@@ -22,9 +20,10 @@ class Execution extends Model
      * @var array
      */
     protected $fillable = [
-        'model_key',
-        'model_type',
-        'questionnaire_id'
+        'executable_id',
+        'executable_type',
+        'questionnaire_id',
+        'score'
     ];
 
     /**
@@ -35,8 +34,16 @@ class Execution extends Model
     protected $casts = [
         'id'          => 'integer',
         'name'        => 'string',
-        'description' => 'string'
+        'description' => 'string',
+        'score'       => 'float'
     ];
 
+    /**
+     * Get the questionnaire of the alternative.
+     */
+    public function questionnaire()
+    {
+        return $this->belongsTo(Questionnaire::class);
+    }
 
 }

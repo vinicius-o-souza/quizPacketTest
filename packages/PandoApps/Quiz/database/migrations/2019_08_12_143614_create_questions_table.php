@@ -16,8 +16,7 @@ class CreateQuestionsTable extends Migration
         /**
          * Tabela de questões:
          *    is_active          => define se a questão está ativa ou não,
-         *    title              => título, ou pergunta, da questão,
-         *    body               => texto complementar para o title,
+         *    description        => pergunta da questão,
          *    hint               => dica para a questão,
          *    is_required        => define se a resposta dessa questão é obrigatória,
          *    weight             => define o peso da nota da questão no questionário,
@@ -27,8 +26,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->boolean('is_active')->default(true);
-            $table->string('title');
-            $table->longText('body')->nullable();
+            $table->string('description');
             $table->string('hint')->nullable();
             $table->boolean('is_required')->default(true);
             $table->float('weight')->default(1);
@@ -40,7 +38,6 @@ class CreateQuestionsTable extends Migration
             $table->foreign('question_type_id')->references('id')->on('question_types')->onDelete('cascade');
 
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

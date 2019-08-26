@@ -3,11 +3,9 @@
 namespace PandoApps\Quiz\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends Model
 {
-    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -23,8 +21,7 @@ class Question extends Model
      */
     protected $fillable = [
         'is_active',
-        'title',
-        'body',
+        'description',
         'hint',
         'is_required',
         'question_type_id',
@@ -39,8 +36,7 @@ class Question extends Model
      */
     protected $casts = [
         'id'                => 'integer',
-        'title'             => 'string',
-        'body'              => 'string',
+        'descripton'        => 'string',
         'hint'              => 'string',
         'is_required'       => 'boolean',
         'is_active'         => 'boolean',
@@ -55,8 +51,7 @@ class Question extends Model
      * @var array
      */
     public static $rules = [
-        'title' => 'required',
-        'is_required' => 'required',
+        'description' => 'required',
         'weight' => 'required',
         'question_type_id' => 'required'
     ];
@@ -72,7 +67,7 @@ class Question extends Model
     /**
      * Get the question_type of the question.
      */
-    public function question_type()
+    public function questionType()
     {
         return $this->belongsTo(QuestionType::class);
     }

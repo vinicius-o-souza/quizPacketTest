@@ -9,23 +9,25 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use PandoApps\Quiz\DataTables\AnswerDataTable;
 
-/**
- *  Essa classe possui métodos para criar, atualizar, excluir e exibir respostas
- *  @author Rauhann Chaves <rauhann2711@gmail.com>
- */
 class AnswerController extends Controller
 {
 
     /**
-     * Retorna todas as respostas cadastradas
+     * Display a listing of the resource.
+     *
+     * @param AnswerDataTable $answerDataTable
+     * @return \Illuminate\Http\Response
      */
     public function index(AnswerDataTable $answerDataTable)
     {
         return $answerDataTable->render('pandoapps::answers.index');
     }
 
+    
     /**
-     * Redireciona para a tela de cadastrar uma resposta
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -35,9 +37,10 @@ class AnswerController extends Controller
     }
 
     /**
-     * Salva uma resposta
-     * @param Request $request
-     * @return mixed
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -65,9 +68,29 @@ class AnswerController extends Controller
     }
 
     /**
-     * Exibe a resposta para edição
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $answer = Answer::find($id);
+
+        if(empty($answer)) {
+            flash('Resposta não encontrada!')->error();
+
+            return redirect(route('answers.index'));
+        }
+
+        return view('pandoapps::answers.show', compact('answer'));
+    }
+    
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -81,12 +104,13 @@ class AnswerController extends Controller
 
         return view('pandoapps::answers.edit', compact('answer'));
     }
-
+    
     /**
-     * Atualiza uma resposta
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
@@ -119,27 +143,10 @@ class AnswerController extends Controller
     }
 
     /**
-     * Exibe uma resposta pelo id
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $answer = Answer::find($id);
-
-        if(empty($answer)) {
-            flash('Resposta não encontrada!')->error();
-
-            return redirect(route('answers.index'));
-        }
-
-        return view('pandoapps::answers.show', compact('answer'));
-    }
-
-    /**
-     * Deleta uma resposta (softdelete)
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

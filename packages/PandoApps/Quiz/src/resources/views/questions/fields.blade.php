@@ -4,16 +4,10 @@
     {!! Form::select('question_type_id', ['' => 'Selecione um tipo de questão'] + $questionsType, null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Title Field -->
+<!-- Description Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('title', 'Título:') !!}
-    {!! Form::text('title', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Body Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('body', 'Descrição:') !!}
-    {!! Form::text('body', null, ['class' => 'form-control']) !!}
+    {!! Form::label('decription', 'Descrição:') !!}
+    {!! Form::text('description', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Hint Field -->

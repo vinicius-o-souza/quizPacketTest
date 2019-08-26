@@ -18,12 +18,18 @@ class QuestionDataTable extends DataTable
     public function dataTable()
     {
         $questionnaire_id = request()->questionnaire_id;
-        $questions = Question::where('questionnaire_id', $questionnaire_id)->with('question_type')->get();
+        
+        if($questionnaire_id) {
+            $questions = Question::where('questionnaire_id', $questionnaire_id)->with('questionnaire')->with('questionType')->get();
+        } else {
+            $questions = Question::all(); 
+        }
+        
 
         return Datatables::of($questions)
             ->addColumn('action' , 'pandoapps::questions.datatables_actions')
             ->addColumn('question_type', function(Question $question) {
-                return $question->question_type->name;
+                return $question->questionType->name;
             })
             ->editColumn('is_active', function(Question $question) {
                 return $question->is_active ? 'Sim' : 'Não';
@@ -31,7 +37,15 @@ class QuestionDataTable extends DataTable
             ->editColumn('is_required', function(Question $question) {
                 return $question->is_required ? 'Sim' : 'Não';
             })
-            ->rawColumns(['action', 'question_type', 'is_active', 'is_required']);
+            ->editColumn('questionnaire_id', function(Question $question) {
+                return $question->questionnaire->name;
+            })
+            ->addColumn('alternatives', function(Question $question) {
+                if($question->question_type_id == config('quiz.question_types.CLOSED.id'))
+                    return '<a href="'. route('alternatives.index', ['question_id' => $question->id]) .'"> Alternativas </a>';
+                return '';
+            })
+            ->rawColumns(['action', 'question_type', 'is_active', 'is_required', 'alternatives']);
     }
 
     /**
@@ -55,15 +69,29 @@ class QuestionDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-            'question_type'     => ['title' => 'Tipo da Questão'],
-            'title'             => ['title' => 'Título'],
-            'body'              => ['title' => 'Descrição'],
-            'hint'              => ['title' => 'Dica'],
-            'weight'            => ['title' => 'Peso'],
-            'is_required'       => ['title' => 'Obrigatória'],
-            'is_active'         => ['title' => 'Ativa']
-        ];
+        $questionnaire_id = request()->questionnaire_id;
+        if($questionnaire_id) {
+            return [
+                'question_type'     => ['title' => 'Tipo da Questão'],
+                'description'        => ['title' => 'Descrição'],
+                'hint'              => ['title' => 'Dica'],
+                'weight'            => ['title' => 'Peso'],
+                'is_required'       => ['title' => 'Obrigatória'],
+                'is_active'         => ['title' => 'Ativa'],
+                'alternatives'      => ['title' => 'Alternativas']
+            ];
+        } else {
+            return [
+                'questionnaire_id'  => ['title' => 'Questionário'],
+                'question_type'     => ['title' => 'Tipo da Questão'],
+                'description'       => ['title' => 'Descrição'],
+                'hint'              => ['title' => 'Dica'],
+                'weight'            => ['title' => 'Peso'],
+                'is_required'       => ['title' => 'Obrigatória'],
+                'is_active'         => ['title' => 'Ativa'],
+                'alternatives'      => ['title' => 'Alternativas']
+            ];
+        }
     }
 
     /**

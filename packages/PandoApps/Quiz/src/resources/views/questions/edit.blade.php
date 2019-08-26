@@ -4,7 +4,7 @@
     <section class="content-header">
         <h1 class="pull-left"> Questões</h1>
         <h1 class="pull-right">
-            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('questions.index', ['questionnaire_id' => request()->questionnaire_id]) !!}">Voltar</a>
+            <a class="btn btn-primary pull-right" style="margin-top: -10px;margin-bottom: 5px" href="{!! route('questions.index') !!}">Voltar</a>
         </h1>
     </section>
     <div class="content">
@@ -17,7 +17,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::model($question, ['route' => ['questions.update', request()->questionnaire_id, $question->id], 'method' => 'patch']) !!}
+                    {!! Form::model($question, ['route' => ['questions.update', $question->id], 'method' => 'patch']) !!}
 
                         @include('pandoapps::questions.fields')
 

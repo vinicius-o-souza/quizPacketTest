@@ -1,7 +1,7 @@
 {!! Form::open(['route' => ['alternatives.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>
     <a href="{{ route('alternatives.show', $id) }}" class='btn btn-info'>
-       <i class="fa fa-eye"></i>
+       <i class="fa fa-info-circle"></i>
     </a>
     <a href="{{ route('alternatives.edit', $id) }}" class='btn btn-warning'>
        <i class="fa fa-edit"></i>

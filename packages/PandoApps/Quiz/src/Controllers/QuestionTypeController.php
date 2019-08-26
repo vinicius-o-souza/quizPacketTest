@@ -7,15 +7,13 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use PandoApps\Quiz\Models\QuestionType;
 
-/**
- *  Essa classe possui métodos para criar, atualizar, excluir e exibir questionários
- *  @author Rauhann Chaves <rauhann2711@gmail.com>
- */
 class QuestionTypeController extends Controller
 {
 
     /**
      * Retorna todos os questionários cadastrados
+     * 
+     * @return response
      */
     public function index()
     {
@@ -34,8 +32,9 @@ class QuestionTypeController extends Controller
 
     /**
      * Salva um questionário
-     * @param QuestionTypeRequest $request
-     * @return mixed
+     * 
+     * @param Request $request
+     * @return response
      */
     public function store(Request $request)
     {
@@ -64,8 +63,9 @@ class QuestionTypeController extends Controller
 
     /**
      * Exibe o questionário para edição
+     * 
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @return response
      */
     public function edit($id)
     {
@@ -83,9 +83,10 @@ class QuestionTypeController extends Controller
 
     /**
      * Atualiza um questionário
+     * 
      * @param $id
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return response
      */
     public function update($id, Request $request)
     {
@@ -119,8 +120,9 @@ class QuestionTypeController extends Controller
 
     /**
      * Exibe um questionário pelo id
+     * 
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @return response
      */
     public function show($id)
     {
@@ -136,9 +138,10 @@ class QuestionTypeController extends Controller
     }
 
     /**
-     * Deleta um questionário (softdelete)
+     * Deleta um questionário 
+     * 
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return response
      */
     public function destroy($id)
     {
