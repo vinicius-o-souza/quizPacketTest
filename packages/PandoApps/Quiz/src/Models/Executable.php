@@ -23,7 +23,8 @@ class Executable extends Model
         'executable_id',
         'executable_type',
         'questionnaire_id',
-        'score'
+        'score',
+        'answered'
     ];
 
     /**
@@ -35,7 +36,8 @@ class Executable extends Model
         'id'          => 'integer',
         'name'        => 'string',
         'description' => 'string',
-        'score'       => 'float'
+        'score'       => 'float',
+        'answered'    => 'boolean'
     ];
 
     /**
@@ -45,5 +47,20 @@ class Executable extends Model
     {
         return $this->belongsTo(Questionnaire::class);
     }
-
+    
+    /**
+     * Get the answers for the executable.
+     */
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+    
+    /**
+     * Get the owning executable model.
+     */
+    public function executable()
+    {
+        return $this->morphTo();
+    }
 }

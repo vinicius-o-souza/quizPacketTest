@@ -165,7 +165,6 @@ return [
         /*
          * Package Service Providers...
          */
-        PandoApps\Quiz\QuizServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -2,10 +2,10 @@
 
 namespace PandoApps\Quiz\DataTables;
 
+use Illuminate\Database\Eloquent\Builder;
 use PandoApps\Quiz\Models\Executable;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 
 class ExecutableDataTable extends DataTable
@@ -17,18 +17,38 @@ class ExecutableDataTable extends DataTable
      */
     public function dataTable()
     {
+        $parentName = config('quiz.models.parent_id');
+        $parent_id = request()->$parentName;
+        $questionnaireId = request()->questionnaire_id;
         $modelId = request()->model_id;
         
-        if($modelId) {
-            $executables = Executable::where('executable_id', $modelId)->with('questionnaire')->get();
-        } else {
-            $executables = Executable::all(); 
+        $executables = Executable::whereHas('questionnaire', function (Builder $query) use ($parent_id) {
+            $query->where('parent_id', $parent_id);
+        });
+        if ($modelId) {
+            $executables->where('executable_id', $modelId);
         }
+        if ($questionnaireId) {
+            $executables->where('questionnaire_id', $questionnaireId);
+        }
+        
+        $executables->get();
         
 
         return Datatables::of($executables)
-            ->editColumn('questionnaire_id', function(Executable $executable) {
+            ->addColumn('action', 'pandoapps::executables.datatables_actions')
+            ->editColumn('questionnaire_id', function (Executable $executable) {
                 return $executable->questionnaire->name;
+            })
+            ->editColumn('executable_id', function (Executable $executable) {
+                $columnName = config('quiz.models.executable_column_name');
+                if ($columnName) {
+                    return $executable->executable->$columnName;
+                }
+                return $executable->id;
+            })
+            ->editColumn('created_at', function (Executable $executable) {
+                return $executable->created_at->format('d/m/Y');
             });
     }
 
@@ -42,6 +62,7 @@ class ExecutableDataTable extends DataTable
         return $this->builder()
             ->minifiedAjax()
             ->columns($this->getColumns())
+            ->addAction(['printable' => false, 'title' => 'Opções'])
             ->parameters(DataTablesDefaults::getParameters());
     }
 
@@ -53,16 +74,18 @@ class ExecutableDataTable extends DataTable
     protected function getColumns()
     {
         $modelId = request()->model_id;
-        if($modelId) {
+        if ($modelId) {
             return [
-                'questionnaire_id'  => ['title' => 'Questionário'],
-                'score'             => ['title' => 'Nota'],
+                'questionnaire_id'  => ['title' => \Lang::get('pandoapps::datatable.columns.executables.questionnaire_id')],
+                'score'             => ['title' => \Lang::get('pandoapps::datatable.columns.executables.score')],
+                'created_at'        => ['title' => \Lang::get('pandoapps::datatable.columns.executables.created_at')]
             ];
         } else {
             return [
-                'executable_id'     => ['title' => 'Respondeu'],
-                'questionnaire_id'  => ['title' => 'Questionário'],
-                'score'             => ['title' => 'Nota'],
+                'executable_id'     => ['title' => \Lang::get('pandoapps::datatable.columns.executables.executable_id')],
+                'questionnaire_id'  => ['title' => \Lang::get('pandoapps::datatable.columns.executables.questionnaire_id')],
+                'score'             => ['title' => \Lang::get('pandoapps::datatable.columns.executables.score')],
+                'created_at'        => ['title' => \Lang::get('pandoapps::datatable.columns.executables.created_at')]
             ];
         }
     }

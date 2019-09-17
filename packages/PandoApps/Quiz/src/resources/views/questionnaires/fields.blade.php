@@ -10,6 +10,88 @@
     {!! Form::checkbox('answer_once', null, null) !!}
 </div>
 
+<!-- Waiting Time Checkbox -->
+<div class="form-group col-sm-12" id="checkbox_waiting_time_block">
+    {!! Form::label('checkbox_waiting_time', 'Deseja definir um tempo de espera para submeter outra resposta?') !!}
+    {!! Form::checkbox('checkbox_waiting_time', null, null, ['id' => 'checkbox_waiting_time']) !!}
+</div>
+
+<div class="row col-sm-12" id="waiting_time_block" style="display:none">
+    <!-- Waiting Time Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('waiting_time', 'Tempo de Espera:') !!}
+        {!! Form::text('waiting_time', null, ['class' => 'form-control']) !!}
+    </div>
+    
+    <!-- Type Waiting Time Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('waiting_time', 'Tipo do Tempo de Espera:') !!}
+        <select id="type_waiting_time" name="type_waiting_time" class="form-control select2">
+            <option value="{{ config('quiz.type_time.MINUTES.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_waiting_time == config('quiz.type_time.MINUTES.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.MINUTES.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.HOURS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_waiting_time == config('quiz.type_time.HOURS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.HOURS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.DAYS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_waiting_time == config('quiz.type_time.DAYS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.DAYS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.MONTHS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_waiting_time == config('quiz.type_time.MONTHS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.MONTHS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.YEARS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_waiting_time == config('quiz.type_time.YEARS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.YEARS.name') }}
+            </option>
+        </select>
+    </div>
+</div>
+
+<!-- Execution Time Checkbox -->
+<div class="form-group col-sm-12">
+    {!! Form::label('checkbox_execution_time', 'Deseja definir um tempo máximo de execução do questionário?') !!}
+    {!! Form::checkbox('checkbox_execution_time', null, null, ['id' => 'checkbox_execution_time']) !!}
+</div>
+
+<div class="row col-sm-12" id="execution_time_block" style="display:none">
+    <!-- Execution Time Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('execution_time', 'Tempo de Execução:') !!}
+        {!! Form::text('execution_time', null, ['class' => 'form-control']) !!}
+    </div>
+    
+    <!-- Type execution Time Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('execution_time', 'Tipo do Tempo de Execução:') !!}
+        <select id="type_execution_time" name="type_execution_time" class="form-control select2">
+            <option value="{{ config('quiz.type_time.MINUTES.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_execution_time == config('quiz.type_time.MINUTES.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.MINUTES.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.HOURS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_execution_time == config('quiz.type_time.HOURS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.HOURS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.DAYS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_execution_time == config('quiz.type_time.DAYS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.DAYS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.MONTHS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_execution_time == config('quiz.type_time.MONTHS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.MONTHS.name') }}
+            </option>
+            <option value="{{ config('quiz.type_time.YEARS.id') }}"
+                    {{ isset($questionnaire) && ($questionnaire->type_execution_time == config('quiz.type_time.YEARS.id')) ? 'selected': ''}}>
+                    {{ config('quiz.type_time.YEARS.name') }}
+            </option>
+        </select>
+    </div>
+</div>
+
 <input type="hidden" name="countQuestion" id="countQuestion" value="0">
 
 <div class="col-sm-12">
@@ -30,13 +112,13 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12 pt-5">
     {!! Form::submit('Salvar', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('questionnaires.index') !!}" class="btn btn-default">Cancelar</a>
+    <a href="{!! route('questionnaires.index', request()->$parentName) !!}" class="btn btn-default">Cancelar</a>
 </div>
 
 @push('scripts_quiz')
-<script src="{{ asset('vendor/pandoapps_quiz/js/jquery.min.js') }}"></script>
-<script src="{{ asset('vendor/pandoapps_quiz/js/ractive.js') }}"></script>
-<script src="{{ asset('vendor/pandoapps_quiz/js/jquery.ba-throttle-debounce.min.js') }}"></script>
+<script src="{{ asset('vendor/pandoapps/js/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/pandoapps/js/ractive.js') }}"></script>
+<script src="{{ asset('vendor/pandoapps/js/jquery.ba-throttle-debounce.min.js') }}"></script>
 
 <script id="question-template" type="text/ractive">
     <li class="list-group-item questions" id="question_@{{ id }}">
@@ -49,6 +131,12 @@
             </div>
             <div class="col-sm-12 col-md-10">
                 <div class="row">
+                    <!-- Description Field -->
+                    <div class="form-group col-sm-12">
+                        <label for="description">Descrição:  <span class="text-danger"> * </span></label>
+                        <textarea id="description" name="description[@{{ id }}]" class="form-control" rows="3" required>@{{ description }}</textarea>
+                    </div>
+                    
                     <!-- Question Type Field -->
                     <div class="form-group col-sm-12 col-md-6">
                         <label for="question_type_id_@{{ id }}">Tipo da Questão:</label>
@@ -62,12 +150,6 @@
                             @{{/each}}
                         </select>
                         <p class="help-block">Questões do tipo aberta não possuem alternativas.</p>
-                    </div>
-
-                    <!-- Description Field -->
-                    <div class="form-group col-sm-12 col-md-6">
-                        <label for="description">Descrição:  <span class="text-danger"> * </span></label>
-                        <input type="text" id="description" name="description[@{{ id }}]" class="form-control" value="@{{ description }}" required>
                     </div>
 
                     <!-- Hint Field -->
@@ -129,15 +211,15 @@
         </div>
         <div class="col-sm-12 col-md-9 row">
             <!-- Description Field -->
-            <div class="form-group col-sm-12 col-md-6">
+            <div class="form-group col-sm-12">
                 <label for="description">Descrição:  <span class="text-danger"> * </span></label>
-                <input type="text" id="description" name="description_alternative[@{{ idQuestion }}][@{{ id }}]" class="form-control" value="@{{ description }}" required>
+                <textarea id="description" name="description_alternative[@{{ idQuestion }}][@{{ id }}]" class="form-control" rows="2" required>@{{ description }}</textarea>
             </div>
             
             <!-- Value Field -->
             <div class="form-group col-sm-12 col-md-6">
                 <label for="value">Nota da alternativa:  <span class="text-danger"> * </span></label>
-                <input type="number" id="value" name="value_alternative[@{{ idQuestion }}][@{{ id }}]" class="form-control" value="@{{ value }}" required>
+                <input type="number" id="value" name="value_alternative[@{{ idQuestion }}][@{{ id }}]" class="form-control" value="@{{ value }}" min='0' max='10' required>
             </div>
             
             <!-- Is Correct Field -->
@@ -147,7 +229,7 @@
                         @{{#if is_correct }}
                             checked
                         @{{/if }}
-                    > Questão correta?
+                    > Alternativa correta?
                 </label>
             </div>
         </div>
@@ -158,14 +240,73 @@
     const questionsType = {!! json_encode(config('quiz.question_types')) !!};
     
     var questionnaire = [];
-    @if(Request::is('questionnaires/*/edit'))
+    var questionnaireEdit = null;
+    @if(Request::is('*/questionnaires/*/edit'))
         var questionnaireEdit = {!! json_encode($questionnaire) !!};
     @endif
     
     
     $(document).ready(function() {
         
-        @if(Request::is('questionnaires/*/edit'))
+        $(document).on('change', '#answer_once', function () {
+            if($('#answer_once').prop('checked')) {
+                $('#checkbox_waiting_time_block').hide();
+                $('#checkbox_waiting_time').prop('checked', false);
+                $('#waiting_time_block').hide();
+                $('#waiting_time_block input').attr('disabled', true);
+                $('#waiting_time_block select').attr('disabled', true);
+            } else {
+                $('#checkbox_waiting_time_block').show();
+            }
+        });
+        
+        $('#waiting_time_block').hide();
+        $('#waiting_time_block input').attr('disabled', true);
+        $('#waiting_time_block select').attr('disabled', true);   
+        $('#execution_time_block').hide();
+        $('#execution_time_block input').attr('disabled', true);
+        $('#execution_time_block select').attr('disabled', true);
+        
+        if(questionnaireEdit) {
+            if(questionnaireEdit.waiting_time) {
+                $('#checkbox_waiting_time').prop('checked', true);
+                $('#waiting_time_block').show();
+                $('#waiting_time_block input').attr('disabled', false);
+                $('#waiting_time_block select').attr('disabled', false);       
+            }
+            if(questionnaireEdit.execution_time) {
+                $('#checkbox_execution_time').prop('checked', true);
+                $('#execution_time_block').show();
+                $('#execution_time_block input').attr('disabled', false);
+                $('#execution_time_block select').attr('disabled', false);       
+            }
+        }
+        
+        $(document).on('change', '#checkbox_waiting_time', function () {
+            if($('#checkbox_waiting_time').prop('checked')) {
+                $('#waiting_time_block').show();
+                $('#waiting_time_block input').attr('disabled', false);
+                $('#waiting_time_block select').attr('disabled', false);
+            } else {
+                $('#waiting_time_block').hide();
+                $('#waiting_time_block input').attr('disabled', true);
+                $('#waiting_time_block select').attr('disabled', true);
+            }
+        });
+        
+        $(document).on('change', '#checkbox_execution_time', function () {
+            if($('#checkbox_execution_time').prop('checked')) {
+                $('#execution_time_block').show();
+                $('#execution_time_block input').attr('disabled', false);
+                $('#execution_time_block select').attr('disabled', false);
+            } else {
+                $('#execution_time_block').hide();
+                $('#execution_time_block input').attr('disabled', true);
+                $('#execution_time_block select').attr('disabled', true);
+            }
+        });
+        
+        @if(Request::is('*/questionnaires/*/edit'))
             handleQuestionnaireEdit();
         @endif
 
@@ -203,7 +344,7 @@
             
             $('#question_' + thisIdQuestion).remove();
             
-            var countQuestion = $('.questions').length + 1;
+            var countQuestion = $('.questions').length;
             
             $('#countQuestion').val(countQuestion);
             
@@ -230,10 +371,6 @@
             if(typeof thisIdAlternative != "string") {
                 alternativeDeleteAjax(thisIdAlternative);
             }
-        });
-        
-        $('input[required]').on('invalid', function() {
-            this.setCustomValidity('Campo de preenchimento obrigatório.');
         });
 
     });

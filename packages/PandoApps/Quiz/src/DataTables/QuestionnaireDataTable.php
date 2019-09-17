@@ -5,7 +5,6 @@ namespace PandoApps\Quiz\DataTables;
 use PandoApps\Quiz\Models\Questionnaire;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 
 class QuestionnaireDataTable extends DataTable
@@ -17,20 +16,35 @@ class QuestionnaireDataTable extends DataTable
      */
     public function dataTable()
     {
-        $questionnaires = Questionnaire::with('executables')->get();
+        $parentName = config('quiz.models.parent_id');
+        $parent_id = request()->$parentName;
+        
+        $questionnaires = Questionnaire::where('parent_id', $parent_id)->with('executables')->get();
 
         return Datatables::of($questionnaires)
             ->addColumn('action', 'pandoapps::questionnaires.datatables_actions')
-            ->editColumn('is_active', function(Questionnaire $questionnaire) {
+            ->editColumn('is_active', function (Questionnaire $questionnaire) {
                 return $questionnaire->is_active ? 'Sim' : 'Não';
             })
-            ->editColumn('answer_once', function(Questionnaire $questionnaire) {
+            ->editColumn('answer_once', function (Questionnaire $questionnaire) {
                 return $questionnaire->answer_once ? 'Sim' : 'Não';
             })
-            ->addColumn('questions', function(Questionnaire $questionnaire) {
-                return '<a href="'. route('questions.index', ['questionnaire_id' => $questionnaire->id]) .'"> Questões </a>';
+            ->addColumn('questions', function (Questionnaire $questionnaire) use ($parentName, $parent_id) {
+                return '<a href="'. route('questions.index', [$parentName => $parent_id, 'questionnaire_id' => $questionnaire->id]) .'"> Questões </a>';
             })
-            ->rawColumns(['action', 'is_active', 'answer_once', 'questions']);
+            ->addColumn('execution_time', function (Questionnaire $questionnaire) {
+                if ($questionnaire->execution_time) {
+                    return $questionnaire->execution_time .' ' . $questionnaire->handleTypeTime($questionnaire->type_execution_time);
+                }
+                return 'Ilimitado';
+            })
+            ->addColumn('waiting_time', function (Questionnaire $questionnaire) {
+                if ($questionnaire->waiting_time) {
+                    return $questionnaire->waiting_time .' ' . $questionnaire->handleTypeTime($questionnaire->type_waiting_time);
+                }
+                return 'Sem espera';
+            })
+            ->rawColumns(['action', 'is_active', 'answer_once', 'questions', 'execution_time', 'waiting_time']);
     }
 
     /**
@@ -43,7 +57,7 @@ class QuestionnaireDataTable extends DataTable
         return $this->builder()
             ->minifiedAjax()
             ->columns($this->getColumns())
-            ->addAction(['width' => '75px', 'printable' => false, 'title' => 'Opções'])
+            ->addAction(['printable' => false, 'title' => 'Opções'])
             ->parameters(DataTablesDefaults::getParameters());
     }
 
@@ -55,10 +69,12 @@ class QuestionnaireDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name'          => ['title' => 'Nome'],
-            'answer_once'   => ['title' => 'Resposta Única'],
-            'is_active'     => ['title' => 'Ativo'],
-            'questions'     => ['title' => 'Questões']
+            'name'              => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.name')],
+            'answer_once'       => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.answer_once')],
+            'is_active'         => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.is_active')],
+            'questions'         => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.questions')],
+            'execution_time'    => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.execution_time')],
+            'waiting_time'      => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.waiting_time')]
         ];
     }
 

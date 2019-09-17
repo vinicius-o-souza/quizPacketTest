@@ -1,19 +1,26 @@
 {
     "name": "pandoapps/quiz",
-    "description": ":description",
+    "description": "Library for adding questionnaires into Laravel framework",
     "license": "MIT",
     "authors": [
         {
+            "name": "Vinícius",
+            "email": "viniciuso970@gmail.com",
+            "role": "Developer"
+        },
+        {
             "name": "PandoApps",
             "email": "contato@pandoapps.com.br",
-            "homepage": "https://pandoapps.com.br"
+            "homepage": "https://pandoapps.com.br",
+            "role": "Company"
         }
     ],
-    "homepage": "https://github.com/pandoapps/quiz",
     "keywords": ["Laravel", "Quiz"],
     "require": {
+        "php" : ">=7.0",
         "laracasts/flash": "^3.0",
         "laravelcollective/html": "^5.8.0",
+        "predis/predis": "^1.1",
         "yajra/laravel-datatables-buttons": "^4.6",
         "yajra/laravel-datatables-html": "^4.0",
         "yajra/laravel-datatables-oracle": "~9.0"
@@ -22,7 +29,8 @@
         "phpunit/phpunit": "~7.0",
         "mockery/mockery": "^1.1",
         "orchestra/testbench": "~3.0",
-        "sempro/phpunit-pretty-print": "^1.0"
+        "sempro/phpunit-pretty-print": "^1.0",
+        "symplify/easy-coding-standard": "^6.0"
     },
     "autoload": {
         "psr-4": {

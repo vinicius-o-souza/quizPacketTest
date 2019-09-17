@@ -2,6 +2,7 @@
 
 namespace PandoApps\Quiz;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Yajra\DataTables;
 
@@ -28,6 +29,8 @@ class QuizServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
+        
+        View::share('parentName', config('quiz.models.parent_id'));
     }
 
     /**
@@ -41,7 +44,7 @@ class QuizServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('quiz', function ($app) {
-            return new Quiz( new DataTables);
+            return new Quiz(new DataTables);
         });
     }
 
@@ -65,16 +68,16 @@ class QuizServiceProvider extends ServiceProvider
         // Publishing the config.
         $this->publishes([
             __DIR__.'/../config/quiz.php' => config_path('quiz.php'),
-        ]);
+        ], 'config');
 
         // Publishing the views.
         $this->publishes([
-            __DIR__.'/resources/views' => base_path('resources/views/vendor/pandoapps_quiz'),
-        ], 'quiz.views');
+            __DIR__.'/resources/views' => base_path('resources/views/vendor/pandoapps'),
+        ], 'views');
 
         // Publishing the assets.
         $this->publishes([
-            __DIR__.'/public/' => public_path('vendor/pandoapps_quiz'),
+            __DIR__.'/public/' => public_path('vendor/pandoapps'),
         ], 'public');
 
         // Publishing the migrations.
@@ -90,7 +93,7 @@ class QuizServiceProvider extends ServiceProvider
         // Publishing the translations.
         $this->publishes([
             __DIR__.'/resources/lang' => resource_path('lang/vendor/pandoapps'),
-        ]);
+        ], 'lang');
 
 
         // Registering package commands.

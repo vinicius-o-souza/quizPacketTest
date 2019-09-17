@@ -2,10 +2,10 @@
 
 namespace PandoApps\Quiz\DataTables;
 
+use Illuminate\Database\Eloquent\Builder;
 use PandoApps\Quiz\Models\Answer;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 
 class AnswerDataTable extends DataTable
@@ -17,16 +17,28 @@ class AnswerDataTable extends DataTable
      */
     public function dataTable()
     {
+        $parentName = config('quiz.models.parent_id');
+        $parent_id = request()->$parentName;
         $question_id = request()->question_id;
-        $answers = Answer::where('question_id', $question_id)->with('questions')->with('alternatives')->get();
+        
+        $answers = Answer::whereHas('question.questionnaire', function (Builder $query) use ($parent_id) {
+            $query->where('parent_id', $parent_id);
+        })->with('alternative');
+        if ($question_id) {
+            $answers->where('question_id', $question_id);
+        }
+        $answers->get();
 
         return Datatables::of($answers)
-            ->addColumn('action' , 'pandoapps::answers.datatables_actions')
-            ->addColumn('question', function(Answer $answer) {
-                return $answer->question->title;
+            ->addColumn('action', 'pandoapps::answers.datatables_actions')
+            ->addColumn('question', function (Answer $answer) {
+                return $answer->question->description;
             })
-            ->addColumn('alternative', function(Answer $answer) {
-                return $answer->alternative->title;
+            ->addColumn('alternative', function (Answer $answer) {
+                if ($answer->alternative) {
+                    return $answer->alternative->description;
+                }
+                return 'Questão aberta';
             })
             ->rawColumns(['action']);
     }
@@ -41,7 +53,7 @@ class AnswerDataTable extends DataTable
         return $this->builder()
             ->minifiedAjax()
             ->columns($this->getColumns())
-            ->addAction(['width' => '75px', 'printable' => false, 'title' => 'Opções'])
+            ->addAction(['printable' => false, 'title' => 'Opções'])
             ->parameters(DataTablesDefaults::getParameters());
     }
 
@@ -53,11 +65,10 @@ class AnswerDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'question'      => ['title' => 'Questão'],
-            'description'   => ['title' => 'Descrição'],
-            'alternative'   => ['title' => 'Alternativa'],
-            'score'         => ['title' => 'Pontuação'],
-            'alternativa'   => ['title' => 'Alternativa']
+            'question'      => ['title' => \Lang::get('pandoapps::datatable.columns.answers.question')],
+            'alternative'   => ['title' => \Lang::get('pandoapps::datatable.columns.answers.alternative')],
+            'description'   => ['title' => \Lang::get('pandoapps::datatable.columns.answers.description')],
+            'score'         => ['title' => \Lang::get('pandoapps::datatable.columns.answers.score')]
         ];
     }
 
