@@ -1,14 +1,15 @@
 <?php
 
-namespace PandoApps\Quiz\DataTables;
+namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
+use PandoApps\Quiz\DataTables\AnswerDataTableInterface;
 use PandoApps\Quiz\Models\Answer;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
 use Yajra\DataTables\Services\DataTable;
 
-class AnswerDataTable extends DataTable
+class AnswerDataTable extends DataTable implements AnswerDataTableInterface
 {
     /**
      * Build DataTable class.
@@ -17,15 +18,16 @@ class AnswerDataTable extends DataTable
      */
     public function dataTable()
     {
-        $parentName = config('quiz.models.parent_id');
-        $parent_id = request()->$parentName;
-        $question_id = request()->question_id;
+        $parentName = config('quiz.models.parent_url_name');
+        $parentId = config('quiz.models.parent_id');
+        $parentId = request()->$parentId;
+        $questionId = request()->question_id;
         
-        $answers = Answer::whereHas('question.questionnaire', function (Builder $query) use ($parent_id) {
-            $query->where('parent_id', $parent_id);
+        $answers = Answer::whereHas('question.questionnaire', function (Builder $query) use ($parentId) {
+            $query->where('parent_id', $parentId);
         })->with('alternative');
-        if ($question_id) {
-            $answers->where('question_id', $question_id);
+        if ($questionId) {
+            $answers->where('question_id', $questionId);
         }
         $answers->get();
 
@@ -62,7 +64,7 @@ class AnswerDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         return [
             'question'      => ['title' => \Lang::get('pandoapps::datatable.columns.answers.question')],
@@ -77,7 +79,7 @@ class AnswerDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    public function filename()
     {
         return 'questionnairesdatatable_' . time();
     }

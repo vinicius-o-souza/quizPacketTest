@@ -1,13 +1,14 @@
 <?php
 
-namespace PandoApps\Quiz\DataTables;
+namespace App\DataTables;
 
+use PandoApps\Quiz\DataTables\QuestionnaireDataTableInterface;
 use PandoApps\Quiz\Models\Questionnaire;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
 use Yajra\DataTables\Services\DataTable;
 
-class QuestionnaireDataTable extends DataTable
+class QuestionnaireDataTable extends DataTable implements QuestionnaireDataTableInterface
 {
     /**
      * Build DataTable class.
@@ -16,10 +17,11 @@ class QuestionnaireDataTable extends DataTable
      */
     public function dataTable()
     {
-        $parentName = config('quiz.models.parent_id');
-        $parent_id = request()->$parentName;
+        $parentName = config('quiz.models.parent_url_name');
+        $parentId = config('quiz.models.parent_id');
+        $parentId = request()->$parentId;
         
-        $questionnaires = Questionnaire::where('parent_id', $parent_id)->with('executables')->get();
+        $questionnaires = Questionnaire::where('parent_id', $parentId)->with('executables')->get();
 
         return Datatables::of($questionnaires)
             ->addColumn('action', 'pandoapps::questionnaires.datatables_actions')
@@ -29,8 +31,8 @@ class QuestionnaireDataTable extends DataTable
             ->editColumn('answer_once', function (Questionnaire $questionnaire) {
                 return $questionnaire->answer_once ? 'Sim' : 'Não';
             })
-            ->addColumn('questions', function (Questionnaire $questionnaire) use ($parentName, $parent_id) {
-                return '<a href="'. route('questions.index', [$parentName => $parent_id, 'questionnaire_id' => $questionnaire->id]) .'"> Questões </a>';
+            ->addColumn('questions', function (Questionnaire $questionnaire) use ($parentName, $parentId) {
+                return '<a href="'. route('questions.index', [$parentName => $parentId, 'questionnaire_id' => $questionnaire->id]) .'"> Questões </a>';
             })
             ->addColumn('execution_time', function (Questionnaire $questionnaire) {
                 if ($questionnaire->execution_time) {
@@ -66,7 +68,7 @@ class QuestionnaireDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         return [
             'name'              => ['title' => \Lang::get('pandoapps::datatable.columns.questionnaires.name')],
@@ -83,7 +85,7 @@ class QuestionnaireDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    public function filename()
     {
         return 'questionnairesdatatable_' . time();
     }

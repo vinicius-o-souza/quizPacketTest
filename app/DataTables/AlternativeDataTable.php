@@ -1,14 +1,15 @@
 <?php
 
-namespace PandoApps\Quiz\DataTables;
+namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
+use PandoApps\Quiz\DataTables\AlternativeDataTableInterface;
 use PandoApps\Quiz\Models\Alternative;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
 use Yajra\DataTables\Services\DataTable;
 
-class AlternativeDataTable extends DataTable
+class AlternativeDataTable extends DataTable implements AlternativeDataTableInterface
 {
     /**
      * Build DataTable class.
@@ -17,17 +18,18 @@ class AlternativeDataTable extends DataTable
      */
     public function dataTable()
     {
-        $parentName = config('quiz.models.parent_id');
-        $parent_id = request()->$parentName;
-        $question_id = request()->question_id;
+        $parentName = config('quiz.models.parent_url_name');
+        $parentId = config('quiz.models.parent_id');
+        $parentId = request()->$parentId;
+        $alternativeId = request()->alternative_id;
         
-        if ($question_id) {
-            $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parent_id) {
-                $query->where('parent_id', $parent_id);
-            })->where('question_id', $question_id)->with('question')->get();
+        if ($alternativeId) {
+            $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parentId) {
+                $query->where('parent_id', $parentId);
+            })->where('alternative_id', $alternativeId)->with('question')->get();
         } else {
-            $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parent_id) {
-                $query->where('parent_id', $parent_id);
+            $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parentId) {
+                $query->where('parent_id', $parentId);
             })->get();
         }
         
@@ -61,7 +63,7 @@ class AlternativeDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         return [
             'question'      => ['title' => \Lang::get('pandoapps::datatable.columns.alternatives.question')],
@@ -76,7 +78,7 @@ class AlternativeDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    public function filename()
     {
         return 'questionnairesdatatable_' . time();
     }

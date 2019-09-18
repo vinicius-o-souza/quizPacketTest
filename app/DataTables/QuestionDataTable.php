@@ -1,14 +1,15 @@
 <?php
 
-namespace PandoApps\Quiz\DataTables;
+namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
+use PandoApps\Quiz\DataTables\QuestionDataTableInterface;
 use PandoApps\Quiz\Models\Question;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
 use Yajra\DataTables\Services\DataTable;
 
-class QuestionDataTable extends DataTable
+class QuestionDataTable extends DataTable implements QuestionDataTableInterface
 {
     /**
      * Build DataTable class.
@@ -17,15 +18,16 @@ class QuestionDataTable extends DataTable
      */
     public function dataTable()
     {
-        $parentName = config('quiz.models.parent_id');
-        $parent_id = request()->$parentName;
+        $parentName = config('quiz.models.parent_url_name');
+        $parentId = config('quiz.models.parent_id');
+        $parentId = request()->$parentId;
         $questionnaire_id = request()->questionnaire_id;
         
         if ($questionnaire_id) {
             $questions = Question::where('questionnaire_id', $questionnaire_id)->with('questionnaire')->with('questionType')->get();
         } else {
-            $questions = Question::whereHas('questionnaire', function (Builder $query) use ($parent_id) {
-                $query->where('parent_id', $parent_id);
+            $questions = Question::whereHas('questionnaire', function (Builder $query) use ($parentId) {
+                $query->where('parent_id', $parentId);
             })->get();
         }
         
@@ -44,9 +46,9 @@ class QuestionDataTable extends DataTable
             ->editColumn('questionnaire_id', function (Question $question) {
                 return $question->questionnaire->name;
             })
-            ->addColumn('alternatives', function (Question $question)  use ($parentName, $parent_id) {
+            ->addColumn('alternatives', function (Question $question)  use ($parentName, $parentId) {
                 if ($question->question_type_id == config('quiz.question_types.CLOSED.id')) {
-                    return '<a href="'. route('alternatives.index', [$parentName => $parent_id, 'question_id' => $question->id]) .'"> Alternativas </a>';
+                    return '<a href="'. route('alternatives.index', [$parentName => $parentId, 'question_id' => $question->id]) .'"> Alternativas </a>';
                 }
                 return '';
             })
@@ -72,7 +74,7 @@ class QuestionDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         $questionnaire_id = request()->questionnaire_id;
         if ($questionnaire_id) {
@@ -104,7 +106,7 @@ class QuestionDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    public function filename()
     {
         return 'questionnairesdatatable_' . time();
     }

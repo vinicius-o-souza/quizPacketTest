@@ -1,14 +1,15 @@
 <?php
 
-namespace PandoApps\Quiz\DataTables;
+namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
+use PandoApps\Quiz\DataTables\ExecutableDataTableInterface;
 use PandoApps\Quiz\Models\Executable;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;
 use Yajra\DataTables\Services\DataTable;
 
-class ExecutableDataTable extends DataTable
+class ExecutableDataTable extends DataTable implements ExecutableDataTableInterface
 {
     /**
      * Build DataTable class.
@@ -17,13 +18,14 @@ class ExecutableDataTable extends DataTable
      */
     public function dataTable()
     {
-        $parentName = config('quiz.models.parent_id');
-        $parent_id = request()->$parentName;
+        $parentName = config('quiz.models.parent_url_name');
+        $parentId = config('quiz.models.parent_id');
+        $parentId = request()->$parentId;
         $questionnaireId = request()->questionnaire_id;
         $modelId = request()->model_id;
         
-        $executables = Executable::whereHas('questionnaire', function (Builder $query) use ($parent_id) {
-            $query->where('parent_id', $parent_id);
+        $executables = Executable::whereHas('questionnaire', function (Builder $query) use ($parentId) {
+            $query->where('parent_id', $parentId);
         });
         if ($modelId) {
             $executables->where('executable_id', $modelId);
@@ -71,7 +73,7 @@ class ExecutableDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    public function getColumns()
     {
         $modelId = request()->model_id;
         if ($modelId) {
@@ -95,7 +97,7 @@ class ExecutableDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    public function filename()
     {
         return 'questionnairesdatatable_' . time();
     }
