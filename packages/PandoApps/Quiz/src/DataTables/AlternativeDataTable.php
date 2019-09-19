@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables;
+namespace PandoApps\Quiz\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
 use PandoApps\Quiz\DataTables\AlternativeDataTableInterface;
@@ -22,15 +22,20 @@ class AlternativeDataTable extends DataTable implements AlternativeDataTableInte
         $parentId = config('quiz.models.parent_id');
         $parentId = request()->$parentId;
         $alternativeId = request()->alternative_id;
+        $questionId = request()->question_id;
         
         if ($alternativeId) {
             $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parentId) {
                 $query->where('parent_id', $parentId);
-            })->where('alternative_id', $alternativeId)->with('question')->get();
+            })->where('alternative_id', $alternativeId)->with('question');
         } else {
             $alternatives = Alternative::whereHas('question.questionnaire', function (Builder $query) use ($parentId) {
                 $query->where('parent_id', $parentId);
-            })->get();
+            });
+        }
+        
+        if ($questionId) {
+            $alternatives = $alternatives->where('question_id', $questionId);
         }
         
         return Datatables::of($alternatives)

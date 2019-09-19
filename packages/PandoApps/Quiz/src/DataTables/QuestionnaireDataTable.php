@@ -1,8 +1,7 @@
 <?php
 
-namespace App\DataTables;
+namespace PandoApps\Quiz\DataTables;
 
-use PandoApps\Quiz\DataTables\QuestionnaireDataTableInterface;
 use PandoApps\Quiz\Models\Questionnaire;
 use PandoApps\Quiz\Services\DataTablesDefaults;
 use Yajra\DataTables\Datatables;

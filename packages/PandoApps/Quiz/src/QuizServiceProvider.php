@@ -57,9 +57,13 @@ class QuizServiceProvider extends ServiceProvider
         ];
         
         foreach ($models as $model) {
-            $teste = 'PandoApps\\Quiz\\DataTables\\' . $model .'Interface';
-            $teste2 = 'App\\DataTables\\' . $model;
-            $this->app->bind($teste, $teste2);
+            $dataTableInterface = 'PandoApps\\Quiz\\DataTables\\' . $model .'Interface';
+            $dataTable = 'App\\DataTables\\' . $model;
+            if(class_exists($dataTable)) {
+                $this->app->bind($dataTableInterface, $dataTable);
+            } else {
+                $this->app->bind($dataTableInterface, 'PandoApps\\Quiz\\DataTables\\'. $model);   
+            }
         }
 
     }

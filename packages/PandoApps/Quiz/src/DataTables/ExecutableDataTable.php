@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTables;
+namespace PandoApps\Quiz\DataTables;
 
 use Illuminate\Database\Eloquent\Builder;
 use PandoApps\Quiz\DataTables\ExecutableDataTableInterface;
