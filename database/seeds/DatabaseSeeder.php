@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
             'password'  => bcrypt('123456')
         ]);
         $this->call(QuestionTypeSeeder::class);
+        $this->call(QuestionnaireDespminasSeeder::class);
     }
 }

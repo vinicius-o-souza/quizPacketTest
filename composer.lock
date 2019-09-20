@@ -381,6 +381,52 @@
             "time": "2019-09-03T16:45:42+00:00"
         },
         {
+            "name": "ghunti/highcharts-php",
+            "version": "v3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ghunti/HighchartsPHP.git",
+                "reference": "548b321478510ec1559432a9baabbfba1a1e559a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ghunti/HighchartsPHP/zipball/548b321478510ec1559432a9baabbfba1a1e559a",
+                "reference": "548b321478510ec1559432a9baabbfba1a1e559a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ghunti\\HighchartsPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Gonçalo Queirós",
+                    "email": "mail@goncaloqueiros.net",
+                    "homepage": "http://goncaloqueiros.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A php wrapper for highcharts and highstock javascript libraries",
+            "homepage": "http://goncaloqueiros.net/highcharts.php",
+            "keywords": [
+                "charts",
+                "highcharts",
+                "highstock",
+                "javascript",
+                "php"
+            ],
+            "time": "2016-01-24T11:57:43+00:00"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "v0.2",
             "source": {
@@ -1377,14 +1423,15 @@
         },
         {
             "name": "pandoapps/quiz",
-            "version": "dev-master",
+            "version": "dev-development",
             "dist": {
                 "type": "path",
                 "url": "packages/PandoApps/Quiz",
-                "reference": "7e7475275484bdac0fb2eac54d6c0277ea322bc0",
+                "reference": "48038d43f871f4218008f413d2cb8d396baa3f7b",
                 "shasum": null
             },
             "require": {
+                "ghunti/highcharts-php": "~3.0",
                 "laracasts/flash": "^3.0",
                 "laravelcollective/html": "^5.8.0",
                 "php": ">=7.0",
@@ -1394,6 +1441,7 @@
                 "yajra/laravel-datatables-oracle": "~9.0"
             },
             "require-dev": {
+                "ghunti/highcharts-php": "~3.0",
                 "mockery/mockery": "^1.1",
                 "orchestra/testbench": "~3.0",
                 "phpunit/phpunit": "~7.0",
