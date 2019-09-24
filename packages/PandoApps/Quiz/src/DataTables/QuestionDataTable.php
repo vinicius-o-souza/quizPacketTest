@@ -48,7 +48,7 @@ class QuestionDataTable extends DataTable implements QuestionDataTableInterface
             })
             ->addColumn('alternatives', function (Question $question)  use ($parentName, $parentId) {
                 if ($question->isCLosed()) {
-                    return '<a href="'. route('alternatives.index', [$parentName => $parentId, 'question_id' => $question->id]) .'"> Alternativas </a>';
+                    return '<a href="'. route('alternatives.index', [$parentName => $parentId, 'question_id' => $question->id, 'questionnaire_id' => $question->questionnaire_id]) .'"> Alternativas </a>';
                 }
                 return '';
             })

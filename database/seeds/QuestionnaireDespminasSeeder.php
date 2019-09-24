@@ -20,7 +20,8 @@ class QuestionnaireDespminasSeeder extends Seeder
             'waiting_time'          => 30,
             'type_waiting_time'     => config('quiz.type_time.DAYS.id'),
             'execution_time'        => 60,
-            'type_execution_time'   => config('quiz.type_time.MINUTES.id')
+            'type_execution_time'   => config('quiz.type_time.MINUTES.id'),
+            'rand_questions'        => 1
         ]);
         
         // Question 1

@@ -23,7 +23,7 @@ class CreateAnswersTable extends Migration
          */
 
         Schema::create('answers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->longText('description')->nullable();
             $table->float('score')->nullable();
 
